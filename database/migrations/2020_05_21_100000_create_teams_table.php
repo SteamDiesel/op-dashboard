@@ -18,6 +18,13 @@ return new class extends Migration
             $table->foreignId('user_id')->index();
             $table->string('name');
             $table->boolean('personal_team');
+            $table->string('client_id')->nullable();
+            $table->string('client_secret')->nullable();
+            $table->string('access_token')->nullable();
+            $table->string('token_type')->nullable();
+            $table->string('scope')->nullable();
+            $table->string('refresh_token')->nullable();
+            $table->integer('expires_in')->nullable();
             $table->timestamps();
         });
     }

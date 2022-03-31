@@ -29,6 +29,13 @@ class Team extends JetstreamTeam
     protected $fillable = [
         'name',
         'personal_team',
+        'client_id',
+        'client_secret',
+        'access_token',
+        'token_type',
+        'scope',
+        'refresh_token',
+        'expires_in',
     ];
 
     /**
