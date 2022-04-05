@@ -10,7 +10,6 @@ import Tinkering from "@/Pages/Tinkering.vue";
 				Tinkering
 			</h2>
 		</template>
-		<!-- http://localhost/dashboard?code=85424fce1b3dd3ca3bdd1eb6e264b01f8cbff8ae&state=63761 -->
 
 		<div class="py-12">
 			<div class="max-w-7xl mx-auto sm:px-6 lg:px-8">

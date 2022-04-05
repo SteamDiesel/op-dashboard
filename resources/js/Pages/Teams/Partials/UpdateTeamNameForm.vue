@@ -25,6 +25,28 @@ const updateTeamName = () => {
 	});
 };
 </script>
+<script>
+export default {
+	computed: {
+		auth_link() {
+			let $state = Math.round(Math.random() * 100000);
+
+			let $link =
+				"https://propertymanager.our.property/api/authorize?" +
+				"response_type=code" +
+				"&client_id=" +
+				this.team.client_id +
+				"&authorize=1" +
+				"&redirect_uri=" +
+				"http://localhost/authenticated" +
+				"&state=" +
+				$state;
+
+			return $link;
+		},
+	},
+};
+</script>
 
 <template>
 	<JetFormSection @submitted="updateTeamName">
@@ -100,6 +122,38 @@ const updateTeamName = () => {
 					:message="form.errors.client_secret"
 					class="mt-2"
 				/>
+			</div>
+			<!-- Team Authenticate with server Status -->
+			<div class="col-span-6 sm:col-span-4">
+				<div>
+					<a :href="auth_link">
+						<div
+							class="
+								inline-flex
+								items-center
+								px-4
+								py-2
+								bg-gray-800
+								border border-transparent
+								rounded-md
+								font-semibold
+								text-xs text-white
+								uppercase
+								tracking-widest
+								hover:bg-gray-700
+								active:bg-gray-900
+								focus:outline-none
+								focus:border-gray-900
+								focus:ring
+								focus:ring-gray-300
+								disabled:opacity-25
+								transition
+							"
+						>
+							Connect
+						</div>
+					</a>
+				</div>
 			</div>
 		</template>
 

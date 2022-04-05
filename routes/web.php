@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\OurPropertyConnection;
+use App\Http\Controllers\ConnectionServiceController;
+use App\Models\Team;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
@@ -42,22 +45,12 @@ Route::middleware([
             'param_code' => $request->code,
         ]);
     })->name('dashboard');
-    // Route::get('/tinkering', function () {
-    //     $response = Http::get('http://example.com');
-    //     return $response;
-    // });
     Route::get('/tinkering', function () {
-        return Inertia::render('Tinkering');
-    })->name('tinkering');
-
-    Route::get('/authenticated', function (Request $request) {
-        $response = Http::post('https://propertymanager.our.property/api/token', [
-            'code' => $request->code,
-            'client_id' => 'A2Ngw83NAX3AY9r9f9xx',
-            'client_secret' => 'GpROQY2dkBGASEAASpaJceslGPHsptKL',
-            'grant_type' => 'authorization_code',
-            'redirect_uri' => 'http://localhost/authenticated'
-        ]);
+        $response = Team::find(1);
         return $response;
     });
+
+    Route::get('/authenticated', [ConnectionServiceController::class, 'get_token'])->name('authenticated');
+    Route::get('/auth/refresh', [ConnectionServiceController::class, 'refresh_token'])->name('refresh_auth');
+    Route::get('/test_connection', [ConnectionServiceController::class, 'test_connection'])->name('test_connection');
 });

@@ -30,7 +30,6 @@ class UpdateTeamName implements UpdatesTeamNames
             'name' => $input['name'],
             'client_id' => $input['client_id'],
             'client_secret' => $input['client_secret']
-
         ])->save();
     }
 }
