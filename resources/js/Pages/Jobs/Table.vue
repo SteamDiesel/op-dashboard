@@ -48,7 +48,19 @@
 											text-gray-900
 										"
 									>
-										Address
+										Agency Details
+									</th>
+									<th
+										scope="col"
+										class="
+											px-3
+											py-3.5
+											text-left text-sm
+											font-semibold
+											text-gray-900
+										"
+									>
+										Tenants
 									</th>
 									<th
 										scope="col"
@@ -62,19 +74,7 @@
 									>
 										Status
 									</th>
-									<th
-										scope="col"
-										class="
-											px-3
-											py-3.5
-											text-left text-sm
-											font-semibold
-											text-gray-900
-										"
-									>
-										Type
-									</th>
-									<th
+									<!-- <th
 										scope="col"
 										class="
 											px-3
@@ -85,7 +85,7 @@
 										"
 									>
 										AgencyID
-									</th>
+									</th> -->
 
 									<th
 										scope="col"
@@ -102,147 +102,17 @@
 								</tr>
 							</thead>
 							<tbody class="divide-y divide-gray-200 bg-white">
-								<tr v-for="job in jobs" :key="job.ID">
-									<td
-										class="
-											whitespace-nowrap
-											py-4
-											pl-4
-											pr-3
-											text-sm
-											sm:pl-6
-										"
-									>
-										<div class="flex items-center max-w-sm">
-											<div class="">
-												<div
-													class="
-														max-w-sm
-														text-ellipsis
-														overflow-hidden
-														font-medium
-														text-gray-900
-													"
-												>
-													{{ job.Title }}
-												</div>
-												<div
-													class="
-														max-w-sm
-														text-ellipsis
-														overflow-hidden
-														text-gray-500
-													"
-												>
-													{{ job.Description }}
-												</div>
-												<div class="text-gray-500">
-													{{ job.Trade }}
-												</div>
-											</div>
-										</div>
-									</td>
-									<!-- <td
-										class="
-											whitespace-nowrap
-											px-3
-											py-4
-											text-sm text-gray-500
-										"
-									>
-										<div class="text-gray-900">
-											{{ job.UserName }}
-										</div>
-										<div class="text-gray-500">
-											{{ job.department }}
-										</div>
-									</td>
-									<td
-										class="
-											whitespace-nowrap
-											px-3
-											py-4
-											text-sm text-gray-500
-										"
-									>
-										<span
-											v-if="job.Active == 1"
-											class="
-												inline-flex
-												rounded-full
-												bg-green-100
-												px-2
-												text-xs
-												font-semibold
-												leading-5
-												text-green-800
-											"
-											>Active</span
-										>
-										<span
-											v-if="job.Active == 0"
-											class="
-												inline-flex
-												rounded-full
-												bg-red-100
-												px-2
-												text-xs
-												font-semibold
-												leading-5
-												text-red-800
-											"
-											>Inactive</span
-										>
-									</td>
-									<td
-										class="
-											whitespace-nowrap
-											px-3
-											py-4
-											text-sm text-gray-500
-										"
-									>
-										{{ job.UserType.toUpperCase() }}
-									</td>
-									<td
-										class="
-											whitespace-nowrap
-											px-3
-											py-4
-											text-sm text-gray-500
-										"
-									>
-										{{ job.AgencyId }}
-									</td>
-
-									<td
-										class="
-											relative
-											whitespace-nowrap
-											py-4
-											pl-3
-											pr-4
-											text-right text-sm
-											font-medium
-											sm:pr-6
-										"
-									>
-										<Link
-											:href="'/user/' + job.UserID"
-											class="
-												text-indigo-600
-												hover:text-indigo-900
-											"
-											>View<span class="sr-only"
-												>, {{ job.UserID }}</span
-											></Link
-										>
-									</td> -->
-								</tr>
+								<TableRow
+									v-for="job in jobs"
+									:key="job.ID"
+									:job="job"
+								></TableRow>
 							</tbody>
 						</table>
 					</div>
-					<pre>{{ jobs }}</pre>
+					<!-- <pre class="max-w-3xl text-ellipsis overflow-hidden">{{
+						jobs
+					}}</pre> -->
 				</div>
 			</div>
 		</div>
@@ -250,7 +120,11 @@
 </template>
 
 <script>
+import TableRow from "./TableRow.vue";
 export default {
+	components: {
+		TableRow,
+	},
 	setup() {
 		return {};
 	},

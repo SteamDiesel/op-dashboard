@@ -17,6 +17,7 @@ class JobsController extends Controller
     public function index(Request $request)
     {
         //
+
         if ($request->property_id) {
 
             $response = Http::withToken(Auth::user()->currentTeam->access_token)->acceptJson()
