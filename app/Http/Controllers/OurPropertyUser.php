@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Inertia\Inertia;
 
-class JobsController extends Controller
+class OurPropertyUser extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,23 +17,23 @@ class JobsController extends Controller
     public function index(Request $request)
     {
         //
-        if ($request->property_id) {
+        if ($request->email) {
 
             $response = Http::withToken(Auth::user()->currentTeam->access_token)->acceptJson()
-                ->get('https://propertymanager.our.property/api/JobRetrieve', [
-                    'PropertyID' => $request->property_id
+                ->get('https://propertymanager.our.property/api/GetUserInfo', [
+                    'Email' => $request->email
                 ]);
             if ($response->successful()) {
                 if (is_array($response->object()->data)) {
-                    return Inertia::render('Jobs/Index', [
-                        'jobs' => $response->object()->data
+                    return Inertia::render('Users/Index', [
+                        'users' => $response->object()->data
                     ]);
                 }
                 if (is_object($response->object()->data)) {
-                    $ar = [];
-                    array_push($ar, $response->object()->data);
-                    return Inertia::render('Jobs/Index', [
-                        'jobs' => $ar
+                    $users = [];
+                    array_push($users, $response->object()->data);
+                    return Inertia::render('Users/Index', [
+                        'users' => $users
                     ]);
                 }
             } else {
@@ -43,21 +43,23 @@ class JobsController extends Controller
         if ($request->agency_id) {
 
             $response = Http::withToken(Auth::user()->currentTeam->access_token)->acceptJson()
-                ->get('https://propertymanager.our.property/api/JobRetrieve', [
+                ->get('https://propertymanager.our.property/api/GetUserInfo', [
+
                     'AgencyID' => $request->agency_id,
+                    'UserType' => $request->user_type
                 ]);
 
             if ($response->successful()) {
                 if (is_array($response->object()->data)) {
-                    return Inertia::render('Jobs/Index', [
-                        'jobs' => $response->object()->data
+                    return Inertia::render('Users/Index', [
+                        'users' => $response->object()->data
                     ]);
                 }
                 if (is_object($response->object()->data)) {
-                    $ar = [];
-                    array_push($ar, $response->object()->data);
-                    return Inertia::render('Jobs/Index', [
-                        'jobs' => $ar
+                    $users = [];
+                    array_push($users, $response->object()->data);
+                    return Inertia::render('Users/Index', [
+                        'users' => $users
                     ]);
                 }
             } else {
@@ -65,8 +67,8 @@ class JobsController extends Controller
             }
         }
 
-        return Inertia::render('Jobs/Index', [
-            'jobs' => []
+        return Inertia::render('Users/Index', [
+            'users' => []
         ]);
     }
 
@@ -78,7 +80,6 @@ class JobsController extends Controller
     public function create()
     {
         //
-        return 'Create';
     }
 
     /**
@@ -90,7 +91,6 @@ class JobsController extends Controller
     public function store(Request $request)
     {
         //
-        return 'Store';
     }
 
     /**
@@ -99,19 +99,22 @@ class JobsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($job)
+    public function show($user)
     {
         //
+        $token = Auth::user()->currentTeam->access_token;
 
-        $response = Http::withToken(Auth::user()->currentTeam->access_token)->acceptJson()
-            ->get('https://propertymanager.our.property/api/JobRetrieve', [
-                'ID' => $job
+
+        // first get the user
+        $response = Http::withToken($token)->acceptJson()
+            ->get('https://propertymanager.our.property/api/GetUserInfo', [
+                'UserID' => $user
             ]);
-        // return $response->object()->data;
+
+
         if ($response->successful()) {
-            return Inertia::render('Jobs/Show', [
-                'query' => $job,
-                'job' => $response->object()->data
+            return Inertia::render('Users/Show', [
+                'u' => $response->object()->data,
             ]);
         } else {
             return redirect('/auth/refresh');
@@ -127,7 +130,6 @@ class JobsController extends Controller
     public function edit($id)
     {
         //
-        return 'edit';
     }
 
     /**
@@ -140,7 +142,6 @@ class JobsController extends Controller
     public function update(Request $request, $id)
     {
         //
-        return 'Update';
     }
 
     /**
@@ -152,6 +153,5 @@ class JobsController extends Controller
     public function destroy($id)
     {
         //
-        return "delete";
     }
 }

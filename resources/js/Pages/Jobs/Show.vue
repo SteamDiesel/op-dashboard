@@ -6,12 +6,16 @@ import { reactive } from "vue";
 
 <template>
 	<MainLayout title="Job">
-		<div class="flex w-full justify-between">
-			<div>{{ $attrs.function }} {{ $attrs.job }}</div>
-			<div><button>Edit</button></div>
+		<div v-if="!$attrs.job" class="flex w-full justify-between">
+			<div>
+				No results retrieved for the job number {{ $attrs.query }}
+			</div>
 		</div>
-		<div>
-			<div class="flex w-full"></div>
+		<div v-if="$attrs.job" class="flex w-full justify-between">
+			<div class="w-full">
+				<div>Result for job ID {{ $attrs.query }}</div>
+				<pre>{{ $attrs.job }}</pre>
+			</div>
 		</div>
 	</MainLayout>
 </template>

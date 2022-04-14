@@ -75,13 +75,10 @@ class ConnectionServiceController extends Controller
     public function test_connection()
     {
 
-        $team = Auth::user()->currentTeam;
-
-        $response = Http::withToken($team->access_token)
-            ->get('https://propertymanager.ourtradie.com.au/api/GetAgencyInfo', [
-                'AgencyID' => 74651,
-                'UserType' => 'PM',
-                'Email' => 'julianaftessarolo@gmail.com'
+        $token = Auth::user()->currentTeam->access_token;
+        $response = Http::withToken($token)->acceptJson()
+            ->get('https://propertymanager.our.property/api/GetUserInfo', [
+                'Email' => 'l_somerville@outlook.com'
             ]);
         return $response;
     }

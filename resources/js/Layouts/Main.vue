@@ -1,15 +1,4 @@
-<!-- This example requires Tailwind CSS v2.0+ -->
-
-
 <template>
-	<!--
-    This example requires updating your template:
-
-    ```
-    <html class="h-full">
-    <body class="h-full">
-    ```
-  -->
 	<AppLayout :title="title">
 		<div>
 			<TransitionRoot as="template" :show="sidebarOpen">
@@ -191,11 +180,20 @@
 						bg-white
 					"
 				>
-					<div class="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
-						<div class="flex items-center flex-shrink-0 px-4">
+					<div class="flex-1 flex flex-col pb-4 overflow-y-auto">
+						<div
+							class="
+								flex
+								items-center
+								flex-shrink-0
+								px-4
+								py-3
+								bg-slate-500
+							"
+						>
 							<img
-								class="h-8 w-auto"
-								src="https://tailwindui.com/img/logos/workflow-logo-indigo-600-mark-gray-800-text.svg"
+								class="h-10 w-auto"
+								src="/images/logo2-1.png"
 								alt="Workflow"
 							/>
 						</div>
@@ -308,12 +306,12 @@
 				</div>
 				<main class="flex-1">
 					<div class="py-6">
-						<div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
+						<div class="w-full mx-auto px-4 sm:px-6 md:px-8">
 							<h1 class="text-2xl font-semibold text-gray-900">
 								{{ title }}
 							</h1>
 						</div>
-						<div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
+						<div class="w-full mx-auto px-4 sm:px-6 md:px-8">
 							<!-- Replace with your content -->
 							<div class="py-4">
 								<slot></slot>
@@ -330,6 +328,7 @@
 <script>
 import { ref } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
+
 import { Head, Link } from "@inertiajs/inertia-vue3";
 import {
 	Dialog,
@@ -350,15 +349,14 @@ import {
 
 const navigation = [
 	{
-		name: "Dashboard",
-		href: "/dashboard",
-		prefix: "/dashboard",
+		name: "Tickets",
+		href: "/tickets",
+		prefix: "/ticket",
 		icon: HomeIcon,
 	},
-	{ name: "Jobs", href: "/jobs", prefix: "/job", icon: UsersIcon },
-	{ name: "Projects", href: "#", prefix: "/#", icon: FolderIcon },
-	{ name: "Calendar", href: "#", prefix: "/#", icon: CalendarIcon },
-	{ name: "Documents", href: "#", prefix: "/#", icon: InboxIcon },
+
+	{ name: "Users", href: "/users", prefix: "/user", icon: UsersIcon },
+	{ name: "Jobs", href: "/jobs", prefix: "/job", icon: FolderIcon },
 	{
 		name: "Test Connection",
 		href: "/test_connection",
