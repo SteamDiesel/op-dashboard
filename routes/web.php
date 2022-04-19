@@ -5,11 +5,13 @@ use App\Http\Controllers\ConnectionServiceController;
 use App\Http\Controllers\JobsController;
 use App\Http\Controllers\OurPropertyUser;
 use App\Http\Controllers\TicketController;
+use App\Mail\TestMail;
 use App\Models\Team;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -100,6 +102,14 @@ Route::middleware([
         $response = Team::find(1);
         return $response;
     });
+    Route::get('/test_email', function () {
+        $em = Auth::user()->email;
+        // return $em;
+        Mail::to($em)->send(new TestMail());
+
+        return 'a test email was sent to you, check your inbox.';
+    });
+
 
     Route::get('/authenticated', [ConnectionServiceController::class, 'get_token'])->name('authenticated');
     Route::get('/auth/refresh', [ConnectionServiceController::class, 'refresh_token'])->name('refresh_auth');
