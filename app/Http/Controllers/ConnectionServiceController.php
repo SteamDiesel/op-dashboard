@@ -23,7 +23,7 @@ class ConnectionServiceController extends Controller
             'client_id' => $team->client_id,
             'client_secret' => $team->client_secret,
             'grant_type' => 'authorization_code',
-            'redirect_uri' => 'http://localhost/authenticated'
+            'redirect_uri' =>  env('APP_URL') + '/authenticated'
         ]);
 
         $team->access_token = $response['access_token'];
@@ -53,7 +53,7 @@ class ConnectionServiceController extends Controller
             'client_id' => $team->client_id,
             'client_secret' => $team->client_secret,
             'grant_type' => 'refresh_token',
-            'redirect_uri' => 'http://localhost/authenticated'
+            'redirect_uri' => env('APP_URL') + '/authenticated'
         ]);
 
         $team->access_token = $response['access_token'];
