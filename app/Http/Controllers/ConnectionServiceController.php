@@ -17,13 +17,15 @@ class ConnectionServiceController extends Controller
      */
     public function get_token(Request $request)
     {
+        $redirect = env('APP_URL') . '/authenticated';
+
         $team = Auth::user()->currentTeam;
         $response = Http::post('https://propertymanager.our.property/api/token', [
             'code' => $request->code,
             'client_id' => $team->client_id,
             'client_secret' => $team->client_secret,
             'grant_type' => 'authorization_code',
-            'redirect_uri' =>  env('APP_URL') + '/authenticated'
+            'redirect_uri' => $redirect
         ]);
 
         $team->access_token = $response['access_token'];
@@ -47,13 +49,14 @@ class ConnectionServiceController extends Controller
     public function refresh_token()
     {
         $team = Auth::user()->currentTeam;
+        $redirect = env('APP_URL') . '/authenticated';
 
         $response = Http::post('https://propertymanager.our.property/api/token', [
             'refresh_token' => $team->refresh_token,
             'client_id' => $team->client_id,
             'client_secret' => $team->client_secret,
             'grant_type' => 'refresh_token',
-            'redirect_uri' => env('APP_URL') + '/authenticated'
+            'redirect_uri' => $redirect
         ]);
 
         $team->access_token = $response['access_token'];

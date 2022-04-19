@@ -1,17 +1,16 @@
-<script setup>
-import MainLayout from "@/Layouts/Main.vue";
+
+<script>
 import { Inertia } from "@inertiajs/inertia";
-import { reactive } from "vue";
+import MainLayout from "@/Layouts/Main.vue";
 import ButtonPrimary from "@/Pages/Buttons/Primary.vue";
 import { Link } from "@inertiajs/inertia-vue3";
 import JobsTable from "./Table.vue";
-</script>
-<script>
 export default {
 	components: {
 		ButtonPrimary,
 		Link,
 		JobsTable,
+		MainLayout,
 	},
 	data() {
 		return {
