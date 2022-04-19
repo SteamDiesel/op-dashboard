@@ -38,7 +38,8 @@ export default {
 				this.team.client_id +
 				"&authorize=1" +
 				"&redirect_uri=" +
-				"http://localhost/authenticated" +
+				window.location.origin +
+				"/authenticated" +
 				"&state=" +
 				$state;
 
