@@ -93,7 +93,7 @@ export default {
 						autocomplete="off"
 						type="text"
 						v-model="job_id"
-						@keyup.enter="byJobID"
+						@keydown.enter="byJobID"
 						class="
 							shadow-sm
 							max-w-xs
@@ -124,6 +124,7 @@ export default {
 						autocomplete="off"
 						type="text"
 						v-model="agency_id"
+						@keydown.enter="byAgency"
 						class="
 							shadow-sm
 							max-w-xs
