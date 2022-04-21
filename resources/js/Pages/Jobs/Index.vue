@@ -40,6 +40,9 @@ export default {
 				{ preserveState: true }
 			);
 		},
+		byJobID() {
+			Inertia.visit("/job/" + this.job_id);
+		},
 		userType($val) {
 			this.user_type = $val;
 		},
@@ -59,6 +62,7 @@ export default {
 						autocomplete="off"
 						type="email"
 						v-model="property_id"
+						@keydown.enter="byProperty"
 						class="
 							shadow-sm
 							max-w-xs
@@ -89,6 +93,7 @@ export default {
 						autocomplete="off"
 						type="text"
 						v-model="job_id"
+						@keyup.enter="byJobID"
 						class="
 							shadow-sm
 							max-w-xs
@@ -104,9 +109,8 @@ export default {
 						placeholder="eg. 74159"
 						aria-describedby="user's I.D. number"
 					/>
-					<Link :href="search_by_id">
-						<ButtonPrimary>Find</ButtonPrimary>
-					</Link>
+
+					<ButtonPrimary @click="byJobID">Find</ButtonPrimary>
 				</div>
 			</div>
 			<div class="max-w-xs mr-8">

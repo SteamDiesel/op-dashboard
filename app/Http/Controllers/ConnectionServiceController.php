@@ -36,7 +36,7 @@ class ConnectionServiceController extends Controller
 
         $team->save();
 
-        return "New token retrieved";
+        return redirect('/tickets');
     }
 
     //
@@ -67,7 +67,7 @@ class ConnectionServiceController extends Controller
 
         $team->save();
 
-        return "Token refreshed";
+        return back();
     }
 
     /**
@@ -81,8 +81,16 @@ class ConnectionServiceController extends Controller
         $token = Auth::user()->currentTeam->access_token;
         $response = Http::withToken($token)->acceptJson()
             ->get('https://propertymanager.our.property/api/GetUserInfo', [
-                'Email' => 'l_somerville@outlook.com'
+                'UserID' => '77376'
             ]);
-        return $response;
+        if ($response->successful()) {
+            if ($response->object()->data->UserID == '77376') {
+                return $response->object();
+            } else {
+                return redirect('/auth/refresh');
+            }
+        } else {
+            return "Connection error. Are the team Auth credentials entered and valid?";
+        }
     }
 }

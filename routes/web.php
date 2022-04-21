@@ -60,41 +60,17 @@ Route::middleware([
     //     ]);
     // })->name('jobs');
     Route::get('/tickets', [TicketController::class, 'index']);
+    Route::get('/tickets/closed', [TicketController::class, 'closed_index']);
+    Route::get('/tickets/team', [TicketController::class, 'team_index']);
+    Route::get('/tickets/team/closed', [TicketController::class, 'team_closed_index']);
     Route::get('/ticket/{ticket}', [TicketController::class, 'show']);
     Route::get('/jobs', [JobsController::class, 'index']);
     Route::get('/job/{job}', [JobsController::class, 'show']);
     Route::get('/users', [OurPropertyUser::class, 'index']);
     Route::get('/user/{user_id}', [OurPropertyUser::class, 'show']);
-    Route::post('/user/getProperties', function (Request $request) {
-        $response = Http::withToken(Auth::user()->currentTeam->access_token)->acceptJson()
-            ->get('https://propertymanager.our.property/api/GetPropertyInfo', [
-                'TenantID' => $request->user_id
-            ]);
-        if ($response->successful()) {
-            return $response->object()->data;
-            return Inertia::render('Users/Show', [
-                'properties' => $response->object()->data
-            ]);
-        } else {
-            return redirect('/auth/refresh');
-        }
-    });
-    Route::post('/user/getTenancy', function (Request $request) {
-        $response = Http::withToken(Auth::user()->currentTeam->access_token)->acceptJson()
-            ->get('https://propertymanager.our.property/api/GetTenantInfo', [
-                'UserID' => $request->user_id
-            ]);
-
-        if ($response->successful()) {
-            return $response->object()->data;
-            return Inertia::render('Users/Show', [
-                'tenancy' => $response->object()->data
-            ]);
-        } else {
-            return redirect('/auth/refresh');
-        }
-    });
-
+    Route::post('/user/getProperties', [OurPropertyUser::class, 'properties']);
+    Route::post('/user/getTenancy', [OurPropertyUser::class, 'tenancies']);
+    Route::post('/getAgency', [OurPropertyUser::class, 'agency']);
 
 
     Route::get('/tinkering', function () {

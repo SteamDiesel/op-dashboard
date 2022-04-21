@@ -35,15 +35,19 @@ const getTenancy = function (u) {
 			console.log(error);
 		});
 };
-</script>
-<script>
-export default {
-	data() {
-		return {
-			p: "",
-		};
-	},
-	methods: {},
+const getAgency = function (u) {
+	u.Agency = "please wait...";
+	axios
+		.post("/getAgency", {
+			agency_id: u.AgencyId,
+		})
+		.then((response) => {
+			u.Agency = response.data;
+		})
+		.catch((error) => {
+			u.Agency = "Error. Check the console log OR try again.";
+			console.log(error);
+		});
 };
 </script>
 
@@ -60,7 +64,9 @@ export default {
 				<Primary @click.prevent="getTenancy($attrs.u)"
 					>+ Tenancy Info</Primary
 				>
-				<Primary>+ Agency Details</Primary>
+				<Primary @click.prevent="getAgency($attrs.u)"
+					>+ Agency Details</Primary
+				>
 			</div>
 			<div class="flex">
 				<!-- <Secondary>Edit</Secondary> -->
@@ -68,7 +74,7 @@ export default {
 		</div>
 		<div>
 			<div class="flex w-full">
-				<pre>{{ $attrs.u }}</pre>
+				<ObjectNest :val="$attrs.u"></ObjectNest>
 			</div>
 		</div>
 	</MainLayout>

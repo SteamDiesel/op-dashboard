@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreTicketRequest;
 use App\Http\Requests\UpdateTicketRequest;
 use App\Models\Ticket;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class TicketController extends Controller
@@ -17,10 +18,53 @@ class TicketController extends Controller
     public function index()
     {
         //
+        $tickets = Ticket::whereUserId(Auth::user()->id)->where('is_open', 1)->orderBy('updated_at', 'desc')->get();
 
         return Inertia::render('Tickets/Index', [
-            'function' => 'Index',
-            // 'tickets' => Ticket::where('is_open', true)->get()
+            'tickets' => $tickets
+        ]);
+    }
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function closed_index()
+    {
+        //
+        $tickets = Ticket::whereUserId(Auth::user()->id)->where('is_open', 0)->orderBy('updated_at', 'desc')->get();
+
+        return Inertia::render('Tickets/Index', [
+            'tickets' => $tickets
+        ]);
+    }
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function team_index()
+    {
+        //
+
+        $tickets = Ticket::whereTeamId(Auth::user()->currentTeam->id)->where('is_open', 1)->orderBy('updated_at', 'desc')->get();
+
+        return Inertia::render('Tickets/Index', [
+            'tickets' => $tickets
+        ]);
+    }
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function team_closed_index()
+    {
+        //
+        $tickets = Ticket::whereTeamId(Auth::user()->currentTeam->id)->where('is_open', 0)->orderBy('updated_at', 'desc')->get();
+
+        return Inertia::render('Tickets/Index', [
+            'tickets' => $tickets
         ]);
     }
 
@@ -54,6 +98,10 @@ class TicketController extends Controller
     public function show(Ticket $ticket)
     {
         //
+        return Inertia::render('Tickets/Show', [
+            'ticket' => $ticket
+        ]);
+        // return $ticket;
     }
 
     /**

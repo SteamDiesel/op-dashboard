@@ -154,4 +154,72 @@ class OurPropertyUser extends Controller
     {
         //
     }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function properties(Request $request)
+    {
+        $response = Http::withToken(Auth::user()->currentTeam->access_token)->acceptJson()
+            ->get('https://propertymanager.our.property/api/GetPropertyInfo', [
+                'TenantID' => $request->user_id
+            ]);
+        if ($response->successful()) {
+            return $response->object()->data;
+            return Inertia::render('Users/Show', [
+                'properties' => $response->object()->data
+            ]);
+        } else {
+            return redirect('/auth/refresh');
+        }
+    }
+
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function agency(Request $request)
+    {
+        $response = Http::withToken(Auth::user()->currentTeam->access_token)->acceptJson()
+            ->get('https://propertymanager.our.property/api/GetAgencyInfo', [
+                'AgencyID' => $request->agency_id
+            ]);
+
+        if ($response->successful()) {
+            return $response->object()->data;
+            return Inertia::render('Users/Show', [
+                'agency' => $response->object()->data
+            ]);
+        } else {
+            return redirect('/auth/refresh');
+        }
+    }
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function tenancies(Request $request)
+    {
+        $response = Http::withToken(Auth::user()->currentTeam->access_token)->acceptJson()
+            ->get('https://propertymanager.our.property/api/GetTenantInfo', [
+                'UserID' => $request->user_id
+            ]);
+
+        if ($response->successful()) {
+            return $response->object()->data;
+            return Inertia::render('Users/Show', [
+                'tenancy' => $response->object()->data
+            ]);
+        } else {
+            return redirect('/auth/refresh');
+        }
+    }
 }

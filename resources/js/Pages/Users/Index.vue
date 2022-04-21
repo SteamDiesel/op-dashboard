@@ -20,16 +20,9 @@ export default {
 			user_type: "PM",
 		};
 	},
-	computed: {
-		search_by_id() {
-			return "/user/" + this.user_id;
-		},
-		search_by_agency() {
-			return "/user/" + this.user_id;
-		},
-	},
+
 	methods: {
-		fetchUsers() {
+		byEmail() {
 			Inertia.get(
 				"/users",
 				{ email: this.email },
@@ -43,6 +36,9 @@ export default {
 				{ preserveState: true }
 			);
 		},
+		byUserID() {
+			Inertia.visit("/user/" + this.user_id);
+		},
 		userType($val) {
 			this.user_type = $val;
 		},
@@ -51,7 +47,7 @@ export default {
 </script>
 
 <template>
-	<MainLayout title="Find Users">
+	<MainLayout title="Users">
 		<div class="flex justify-start">
 			<div class="max-w-xs mr-8">
 				<label class="block text-sm font-medium text-gray-700"
@@ -62,6 +58,7 @@ export default {
 						autocomplete="off"
 						type="email"
 						v-model="email"
+						@keydown.enter="byEmail"
 						class="
 							shadow-sm
 							max-w-xs
@@ -78,7 +75,7 @@ export default {
 						aria-describedby="user's email address"
 					/>
 
-					<ButtonPrimary @click="fetchUsers">Find</ButtonPrimary>
+					<ButtonPrimary @click="byEmail">Find</ButtonPrimary>
 				</div>
 			</div>
 			<div class="max-w-xs mr-8">
@@ -92,6 +89,7 @@ export default {
 						autocomplete="off"
 						type="text"
 						v-model="user_id"
+						@keydown.enter="byUserID"
 						class="
 							shadow-sm
 							max-w-xs
@@ -107,9 +105,8 @@ export default {
 						placeholder="eg. 74159"
 						aria-describedby="user's I.D. number"
 					/>
-					<Link :href="search_by_id">
-						<ButtonPrimary>Find</ButtonPrimary>
-					</Link>
+
+					<ButtonPrimary @click="byUserID">Find</ButtonPrimary>
 				</div>
 			</div>
 			<div class="max-w-xs">
@@ -132,6 +129,7 @@ export default {
 						></div>
 						<input
 							v-model="agency_id"
+							@keydown.enter="byAgency"
 							autocomplete="off"
 							type="text"
 							class="
@@ -149,13 +147,13 @@ export default {
 						<div
 							class="absolute inset-y-0 right-0 flex items-center"
 						>
-							<label for="usre_type" class="sr-only"
+							<label for="user_type" class="sr-only"
 								>User Type</label
 							>
 							<select
 								v-model="user_type"
-								id="currency"
-								name="currency"
+								id="user_type"
+								name="user_type"
 								class="
 									focus:ring-indigo-500
 									focus:border-indigo-500

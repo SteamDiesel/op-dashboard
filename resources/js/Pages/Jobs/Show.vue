@@ -11,10 +11,10 @@ import { reactive } from "vue";
 				No results retrieved for the job number {{ $attrs.query }}
 			</div>
 		</div>
-		<div v-if="$attrs.job" class="flex w-full justify-between">
+		<div v-if="$attrs.job" class="w-full">
+			<div class="w-full flex"></div>
 			<div class="w-full">
-				<div>Result for job ID {{ $attrs.query }}</div>
-				<pre>{{ $attrs.job }}</pre>
+				<ObjectNest :val="$attrs.job"></ObjectNest>
 			</div>
 		</div>
 	</MainLayout>
