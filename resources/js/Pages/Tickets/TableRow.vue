@@ -66,7 +66,11 @@
 		</td>
 		<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
 			<div class="max-w-xs text-ellipsis overflow-hidden text-gray-500">
-				{{ ticket.linked_ticket_url }}
+				<img
+					class="h-10 w-10 rounded-full"
+					:src="ticket.user.profile_photo_url"
+					:title="ticket.user.name"
+				/>
 			</div>
 		</td>
 

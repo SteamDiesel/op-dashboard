@@ -1,6 +1,6 @@
 
 <script>
-import { Inertia } from "@inertiajs/inertia";
+// import { Inertia } from "@inertiajs/inertia";
 import MainLayout from "@/Layouts/Main.vue";
 import ButtonPrimary from "@/Pages/Buttons/Primary.vue";
 import { Link } from "@inertiajs/inertia-vue3";
@@ -28,38 +28,18 @@ export default {
 			],
 		};
 	},
-	computed: {
-		// search_by_id() {
-		// 	return "/job/" + this.job_id;
-		// },
-	},
-	methods: {
-		byProperty() {
-			Inertia.get(
-				"/jobs",
-				{ property_id: this.property_id },
-				{ preserveState: true }
-			);
-		},
-		byAgency() {
-			Inertia.get(
-				"/jobs",
-				{ agency_id: this.agency_id },
-				{ preserveState: true }
-			);
-		},
-		byJobID() {
-			Inertia.visit("/job/" + this.job_id);
-		},
-		userType($val) {
-			this.user_type = $val;
-		},
-	},
+
+	methods: {},
 };
 </script>
 
 <template>
 	<MainLayout title="Tickets">
+		<template v-slot:header>
+			<Link href="/tickets/new">
+				<ButtonPrimary>New Ticket</ButtonPrimary>
+			</Link>
+		</template>
 		<NavTabs :tabs="tabs"></NavTabs>
 		<div>
 			<TicketsTable :tickets="$attrs.tickets"></TicketsTable>

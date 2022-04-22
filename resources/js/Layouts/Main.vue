@@ -181,7 +181,8 @@
 					"
 				>
 					<div class="flex-1 flex flex-col pb-4 overflow-y-auto">
-						<div
+						<Link
+							href="/"
 							class="
 								flex
 								items-center
@@ -196,7 +197,7 @@
 								src="/images/logo2-1.png"
 								alt="Workflow"
 							/>
-						</div>
+						</Link>
 						<nav class="mt-5 flex-1 px-2 bg-white space-y-1">
 							<Link
 								v-for="item in navigation"
@@ -306,10 +307,23 @@
 				</div>
 				<main class="flex-1">
 					<div class="py-6">
-						<div class="w-full mx-auto px-4 sm:px-6 md:px-8">
+						<div
+							class="
+								w-full
+								flex
+								justify-between
+								mx-auto
+								px-4
+								sm:px-6
+								md:px-8
+							"
+						>
 							<h1 class="text-2xl font-semibold text-gray-900">
 								{{ title }}
 							</h1>
+							<div>
+								<slot name="header"></slot>
+							</div>
 						</div>
 						<div class="w-full mx-auto px-4 sm:px-6 md:px-8">
 							<!-- Replace with your content -->

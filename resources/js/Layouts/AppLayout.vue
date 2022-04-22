@@ -41,10 +41,26 @@ const logout = () => {
 		<div class="min-h-screen bg-gray-100">
 			<nav class="bg-white border-b border-gray-100">
 				<!-- Primary Navigation Menu -->
-				<div class="w-full px-4 sm:px-6 lg:px-8">
+				<div class="w-full pr-4 sm:pr-6 lg:pr-8">
 					<div class="w-full flex justify-between h-16">
 						<div class="flex">
-							<!-- Logo -->
+							<Link
+								href="/"
+								class="
+									flex
+									items-center
+									flex-shrink-0
+									px-4
+									py-3
+									bg-slate-500
+								"
+							>
+								<img
+									class="h-10 w-auto"
+									src="/images/logo2-1.png"
+									alt="Workflow"
+								/>
+							</Link>
 						</div>
 
 						<div class="hidden sm:flex sm:items-center sm:ml-6">

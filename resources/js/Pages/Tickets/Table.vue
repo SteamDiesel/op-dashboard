@@ -48,7 +48,7 @@
 											text-gray-900
 										"
 									>
-										Agency Details
+										User Details
 									</th>
 									<th
 										scope="col"
@@ -60,7 +60,7 @@
 											text-gray-900
 										"
 									>
-										Link
+										Owner
 									</th>
 									<th
 										scope="col"
@@ -111,6 +111,7 @@
 						</table>
 					</div>
 				</div>
+				<!-- <pre>{{ tickets }}</pre> -->
 			</div>
 		</div>
 	</div>

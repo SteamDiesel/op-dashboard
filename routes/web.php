@@ -52,20 +52,23 @@ Route::middleware([
         return redirect('/tickets');
     })->name('dashboard');
 
-
-    // Route::get('/jobs', function (Request $request) {
-    //     return Inertia::render('Jobs/Find', [
-    //         'name' => 'Jason',
-    //         'param_code' => $request->code,
-    //     ]);
-    // })->name('jobs');
+    // Tickets
     Route::get('/tickets', [TicketController::class, 'index']);
     Route::get('/tickets/closed', [TicketController::class, 'closed_index']);
     Route::get('/tickets/team', [TicketController::class, 'team_index']);
     Route::get('/tickets/team/closed', [TicketController::class, 'team_closed_index']);
     Route::get('/ticket/{ticket}', [TicketController::class, 'show']);
+
+    Route::get('/tickets/new', [TicketController::class, 'create']);
+
+    //
+    Route::post('/ticket/update/{ticket}', [TicketController::class, 'update']);
+
+    // Jobs
     Route::get('/jobs', [JobsController::class, 'index']);
     Route::get('/job/{job}', [JobsController::class, 'show']);
+
+    // Users
     Route::get('/users', [OurPropertyUser::class, 'index']);
     Route::get('/user/{user_id}', [OurPropertyUser::class, 'show']);
     Route::post('/user/getProperties', [OurPropertyUser::class, 'properties']);
