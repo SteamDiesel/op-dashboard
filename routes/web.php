@@ -93,4 +93,28 @@ Route::middleware([
     Route::get('/authenticated', [ConnectionServiceController::class, 'get_token'])->name('authenticated');
     Route::get('/auth/refresh', [ConnectionServiceController::class, 'refresh_token'])->name('refresh_auth');
     Route::get('/test_connection', [ConnectionServiceController::class, 'test_connection'])->name('test_connection');
+
+    Route::get('/refresh_all_tokens', function () {
+
+        $redirect = env('APP_URL') . '/authenticated';
+        $teams = Team::whereNotNull('refresh_token')->get();
+
+        foreach ($teams as $team) {
+            $response = Http::post('https://propertymanager.our.property/api/token', [
+                'refresh_token' => $team->refresh_token,
+                'client_id' => $team->client_id,
+                'client_secret' => $team->client_secret,
+                'grant_type' => 'refresh_token',
+                'redirect_uri' => $redirect
+            ]);
+
+            $team->access_token = $response['access_token'];
+            $team->expires_in = $response['expires_in'];
+            $team->token_type = $response['token_type'];
+            $team->scope = $response['scope'];
+            $team->refresh_token = $response['refresh_token'];
+
+            $team->save();
+        }
+    });
 });
