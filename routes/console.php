@@ -22,14 +22,14 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote');
 
 Artisan::command('refresh_token', function () {
-
+    $redirect = env('APP_URL') . '/authenticated';
     $team = Team::find(1);
     $response = Http::post('https://propertymanager.our.property/api/token', [
         'refresh_token' => $team->refresh_token,
         'client_id' => $team->client_id,
         'client_secret' => $team->client_secret,
         'grant_type' => 'refresh_token',
-        'redirect_uri' => 'http://localhost/authenticated'
+        'redirect_uri' => $redirect
     ]);
     $team->access_token = $response['access_token'];
     $team->expires_in = $response['expires_in'];
