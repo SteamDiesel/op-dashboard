@@ -20,6 +20,7 @@ class ConnectionServiceController extends Controller
         $redirect = env('APP_URL') . '/authenticated';
 
         $team = Auth::user()->currentTeam;
+
         $response = Http::post('https://propertymanager.our.property/api/token', [
             'code' => $request->code,
             'client_id' => $team->client_id,
@@ -27,6 +28,12 @@ class ConnectionServiceController extends Controller
             'grant_type' => 'authorization_code',
             'redirect_uri' => $redirect
         ]);
+        if ($response->failed()) {
+            return response()->json([
+                "message" => "uh oh, the API endpoint failed to accept the connection.",
+                "response" => $response
+            ]);
+        }
 
         $team->access_token = $response['access_token'];
         $team->expires_in = $response['expires_in'];
