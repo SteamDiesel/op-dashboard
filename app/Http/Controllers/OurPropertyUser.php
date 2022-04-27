@@ -17,10 +17,11 @@ class OurPropertyUser extends Controller
     public function index(Request $request)
     {
         //
+        $endpoint = env('API_URL') . '/api/GetUserInfo';
         if ($request->email) {
 
             $response = Http::withToken(Auth::user()->currentTeam->access_token)->acceptJson()
-                ->get('https://propertymanager.our.property/api/GetUserInfo', [
+                ->get($endpoint, [
                     'Email' => $request->email
                 ]);
             if ($response->successful()) {
@@ -43,7 +44,7 @@ class OurPropertyUser extends Controller
         if ($request->agency_id) {
 
             $response = Http::withToken(Auth::user()->currentTeam->access_token)->acceptJson()
-                ->get('https://propertymanager.our.property/api/GetUserInfo', [
+                ->get($endpoint, [
 
                     'AgencyID' => $request->agency_id,
                     'UserType' => $request->user_type
@@ -103,11 +104,11 @@ class OurPropertyUser extends Controller
     {
         //
         $token = Auth::user()->currentTeam->access_token;
-
+        $endpoint = env('API_URL') . '/api/GetUserInfo';
 
         // first get the user
         $response = Http::withToken($token)->acceptJson()
-            ->get('https://propertymanager.our.property/api/GetUserInfo', [
+            ->get($endpoint, [
                 'UserID' => $user
             ]);
 
@@ -163,8 +164,9 @@ class OurPropertyUser extends Controller
      */
     public function properties(Request $request)
     {
+        $endpoint = env('API_URL') . '/api/GetPropertyInfo';
         $response = Http::withToken(Auth::user()->currentTeam->access_token)->acceptJson()
-            ->get('https://propertymanager.our.property/api/GetPropertyInfo', [
+            ->get($endpoint, [
                 'TenantID' => $request->user_id
             ]);
         if ($response->successful()) {
@@ -186,8 +188,9 @@ class OurPropertyUser extends Controller
      */
     public function agency(Request $request)
     {
+        $endpoint = env('API_URL') . '/api/GetAgencyInfo';
         $response = Http::withToken(Auth::user()->currentTeam->access_token)->acceptJson()
-            ->get('https://propertymanager.our.property/api/GetAgencyInfo', [
+            ->get($endpoint, [
                 'AgencyID' => $request->agency_id
             ]);
 
@@ -208,8 +211,9 @@ class OurPropertyUser extends Controller
      */
     public function tenancies(Request $request)
     {
+        $endpoint = env('API_URL') . '/api/GetTenantInfo';
         $response = Http::withToken(Auth::user()->currentTeam->access_token)->acceptJson()
-            ->get('https://propertymanager.our.property/api/GetTenantInfo', [
+            ->get($endpoint, [
                 'UserID' => $request->user_id
             ]);
 

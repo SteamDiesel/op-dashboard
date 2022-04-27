@@ -23,10 +23,11 @@ Artisan::command('inspire', function () {
 
 Artisan::command('refresh_tokens', function () {
     $redirect = env('APP_URL') . '/authenticated';
+    $endpoint = env('API_URL') . '/api/token';
     $teams = Team::whereNotNull('refresh_token')->get();
 
     foreach ($teams as $team) {
-        $response = Http::post('https://propertymanager.our.property/api/token', [
+        $response = Http::post($endpoint, [
             'refresh_token' => $team->refresh_token,
             'client_id' => $team->client_id,
             'client_secret' => $team->client_secret,

@@ -17,11 +17,12 @@ class JobsController extends Controller
     public function index(Request $request)
     {
         //
+        $endpoint = env('API_URL') . '/api/JobRetrieve';
 
         if ($request->property_id) {
 
             $response = Http::withToken(Auth::user()->currentTeam->access_token)->acceptJson()
-                ->get('https://propertymanager.our.property/api/JobRetrieve', [
+                ->get($endpoint, [
                     'PropertyID' => $request->property_id
                 ]);
             if ($response->successful()) {
@@ -44,7 +45,7 @@ class JobsController extends Controller
         if ($request->agency_id) {
 
             $response = Http::withToken(Auth::user()->currentTeam->access_token)->acceptJson()
-                ->get('https://propertymanager.our.property/api/JobRetrieve', [
+                ->get($endpoint, [
                     'AgencyID' => $request->agency_id,
                 ]);
 
@@ -103,12 +104,12 @@ class JobsController extends Controller
     public function show($job)
     {
         //
-
+        $endpoint = env('API_URL') . '/api/JobRetrieve';
         $response = Http::withToken(Auth::user()->currentTeam->access_token)->acceptJson()
-            ->get('https://propertymanager.our.property/api/JobRetrieve', [
+            ->get($endpoint, [
                 'ID' => $job
             ]);
-        // return $response->object()->data;
+
         if ($response->successful()) {
             return Inertia::render('Jobs/Show', [
                 'query' => $job,

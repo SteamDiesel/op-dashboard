@@ -27,25 +27,7 @@ const updateTeamName = () => {
 </script>
 <script>
 export default {
-	computed: {
-		auth_link() {
-			let $state = Math.round(Math.random() * 100000);
-
-			let $link =
-				"https://propertymanager.our.property/api/authorize?" +
-				"response_type=code" +
-				"&client_id=" +
-				this.team.client_id +
-				"&authorize=1" +
-				"&redirect_uri=" +
-				window.location.origin +
-				"/authenticated" +
-				"&state=" +
-				$state;
-
-			return $link;
-		},
-	},
+	computed: {},
 };
 </script>
 
@@ -127,7 +109,7 @@ export default {
 			<!-- Team Authenticate with server Status -->
 			<div class="col-span-6 sm:col-span-4">
 				<div>
-					<a :href="auth_link">
+					<Link href="/auth/connect">
 						<div
 							class="
 								inline-flex
@@ -153,7 +135,7 @@ export default {
 						>
 							Connect
 						</div>
-					</a>
+					</Link>
 				</div>
 			</div>
 		</template>
