@@ -26,20 +26,8 @@ export default {
 		},
 	},
 	methods: {
-		byProperty() {
-			Inertia.get(
-				"/jobs",
-				{ property_id: this.property_id },
-				{ preserveState: true }
-			);
-		},
-		byAgency() {
-			Inertia.get(
-				"/jobs",
-				{ agency_id: this.agency_id },
-				{ preserveState: true }
-			);
-		},
+		byAddress() {},
+		byAgency() {},
 		byJobID() {
 			Inertia.visit("/job/" + this.job_id);
 		},
@@ -53,35 +41,7 @@ export default {
 <template>
 	<MainLayout title="Find Jobs">
 		<div class="flex justify-start">
-			<div class="max-w-xs mr-8">
-				<label class="block text-sm font-medium text-gray-700"
-					>By Property ID</label
-				>
-				<div class="mt-1 flex">
-					<input
-						autocomplete="off"
-						type="email"
-						v-model="property_id"
-						@keydown.enter="byProperty"
-						class="
-							shadow-sm
-							max-w-xs
-							focus:ring-indigo-500 focus:border-indigo-500
-							block
-							w-full
-							sm:text-sm
-							border-gray-300
-							rounded-md
-							p-2
-							mr-2
-						"
-						placeholder="eg. 633052"
-						aria-describedby="property I.D. "
-					/>
-
-					<ButtonPrimary @click="byProperty">Find</ButtonPrimary>
-				</div>
-			</div>
+			<!-- by Job ID -->
 			<div class="max-w-xs mr-8">
 				<label
 					for="email"
@@ -113,6 +73,38 @@ export default {
 					<ButtonPrimary @click="byJobID">Find</ButtonPrimary>
 				</div>
 			</div>
+
+			<!-- By Property ID -->
+			<div class="max-w-xs mr-8">
+				<label class="block text-sm font-medium text-gray-700"
+					>By Property ID</label
+				>
+				<div class="mt-1 flex">
+					<input
+						autocomplete="off"
+						type="email"
+						v-model="property_id"
+						@keydown.enter="byProperty"
+						class="
+							shadow-sm
+							max-w-xs
+							focus:ring-indigo-500 focus:border-indigo-500
+							block
+							w-full
+							sm:text-sm
+							border-gray-300
+							rounded-md
+							p-2
+							mr-2
+						"
+						placeholder="eg. 633052"
+						aria-describedby="property I.D. "
+					/>
+
+					<ButtonPrimary @click="byProperty">Find</ButtonPrimary>
+				</div>
+			</div>
+
 			<div class="max-w-xs mr-8">
 				<label
 					for="email"

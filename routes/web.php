@@ -4,6 +4,7 @@
 use App\Http\Controllers\ConnectionServiceController;
 use App\Http\Controllers\JobsController;
 use App\Http\Controllers\OurPropertyUser;
+use App\Http\Controllers\TicketApiController;
 use App\Http\Controllers\TicketController;
 use App\Mail\TestMail;
 use App\Models\Team;
@@ -64,6 +65,7 @@ Route::middleware([
 
     // Ticket API Post Calls
     Route::post('/ticket/api/getUser', [OurPropertyUser::class, 'fetch']);
+    Route::post('/ticket/api/mergeTradies', [TicketApiController::class, 'mergetradies']);
 
 
     // Jobs

@@ -1,6 +1,9 @@
 <script setup>
 import PageTabs from "../Components/PageTabs.vue";
 import Users from "./Pages/Users.vue";
+import Jobs from "./Pages/Jobs.vue";
+import User from "./Cards/User.vue";
+import MergeTradie from "./Pages/MergeTradie.vue";
 </script>
 
 <script>
@@ -64,6 +67,11 @@ export default {
 			this.$page.props.ticket.users.push(u);
 			this.saveTicket(this.$page.props.ticket);
 		},
+		dropUser(index) {
+			console.log(index);
+			this.$page.props.ticket.users.splice(index, 1);
+			this.saveTicket(this.$page.props.ticket);
+		},
 		addTask() {
 			console.log("adding task");
 			console.log(this.$page.props.ticket);
@@ -103,6 +111,9 @@ export default {
 		changeTab(tab) {
 			this.active_tab = tab;
 		},
+		actionMergeTradie(tradie) {
+			this.active_tab = "merge_tradie";
+		},
 	},
 };
 </script>
@@ -138,12 +149,42 @@ export default {
 			:ticket="$attrs.ticket"
 			@save-ticket="saveTicket"
 			@add-user="addUser"
-		></Users>
+			@action-merge-tradie="actionMergeTradie"
+		>
+			<User
+				class="mb-4"
+				v-for="(u, index) in $attrs.ticket.users"
+				:key="index"
+				:user="u"
+				@action-merge-tradie="actionMergeTradie"
+				@drop-user="dropUser"
+			>
+				<button
+					@click="dropUser(index)"
+					:class="[
+						active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+						'flex px-4 py-2 text-sm w-full justify-center',
+					]"
+				>
+					<span>Drop</span>
+				</button>
+			</User>
+		</Users>
+		<Jobs
+			v-if="active_tab == 'jobs'"
+			:ticket="$attrs.ticket"
+			@save-ticket="saveTicket"
+			@add-user="addUser"
+		></Jobs>
 		<div v-if="active_tab == 'data'" class="w-full h-full">
 			<h2>Ticket Data</h2>
 			<div class="w-full pl-4">
 				<ObjectNest :val="$attrs.ticket"></ObjectNest>
 			</div>
 		</div>
+		<MergeTradie
+			v-if="active_tab == 'merge_tradie'"
+			:ticket="$attrs.ticket"
+		></MergeTradie>
 	</TicketLayout>
 </template>

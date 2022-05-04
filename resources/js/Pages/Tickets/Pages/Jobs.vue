@@ -3,14 +3,14 @@
 		<div class="flex gap-8">
 			<div class="max-w-xs">
 				<label class="block text-sm font-medium text-gray-700"
-					>User email</label
+					>By Property ID</label
 				>
 				<div class="mt-1 flex">
 					<input
 						autocomplete="off"
 						type="email"
-						v-model="email"
-						@keydown.enter="byEmail"
+						v-model="property_id"
+						@keydown.enter="byProperty"
 						class="
 							shadow-sm
 							max-w-xs
@@ -23,23 +23,25 @@
 							p-2
 							mr-2
 						"
-						placeholder="eg. l_somerville@outlook.com"
-						aria-describedby="user's email address"
+						placeholder="eg. 633052"
+						aria-describedby="property I.D. "
 					/>
 
-					<Primary @click="byEmail">Find</Primary>
+					<Primary @click="byProperty">Find</Primary>
 				</div>
 			</div>
 			<div class="max-w-xs">
-				<label class="block text-sm font-medium text-gray-700"
-					>User Mobile number</label
+				<label
+					for="email"
+					class="block text-sm font-medium text-gray-700"
+					>By Job ID</label
 				>
 				<div class="mt-1 flex">
 					<input
 						autocomplete="off"
 						type="text"
-						v-model="phone"
-						@keydown.enter="byPhone"
+						v-model="job_id"
+						@keydown.enter="byJobID"
 						class="
 							shadow-sm
 							max-w-xs
@@ -52,23 +54,25 @@
 							p-2
 							mr-2
 						"
-						placeholder="eg. 0400696332"
-						aria-describedby="user's phone number"
+						placeholder="eg. 74159"
+						aria-describedby="user's I.D. number"
 					/>
 
-					<Primary @click="byPhone">Find</Primary>
+					<Primary @click="byJobID">Find</Primary>
 				</div>
 			</div>
 			<div class="max-w-xs">
-				<label class="block text-sm font-medium text-gray-700"
-					>User ID</label
+				<label
+					for="email"
+					class="block text-sm font-medium text-gray-700"
+					>By Agency ID</label
 				>
 				<div class="mt-1 flex">
 					<input
 						autocomplete="off"
 						type="text"
-						v-model="user_id"
-						@keydown.enter="byId"
+						v-model="agency_id"
+						@keydown.enter="byAgency"
 						class="
 							shadow-sm
 							max-w-xs
@@ -81,11 +85,11 @@
 							p-2
 							mr-2
 						"
-						placeholder="eg. 77356"
-						aria-describedby="user's ID number"
+						placeholder="eg. 74159"
+						aria-describedby="agency's I.D. number"
 					/>
 
-					<Primary @click="byId">Find</Primary>
+					<Primary @click="byAgency">Find</Primary>
 				</div>
 			</div>
 		</div>
@@ -93,27 +97,8 @@
 			<p>
 				Your search returned multiple results, select the one you want.
 			</p>
-			<div v-for="u in people" class="border rounded-lg p-4 flex">
-				<div class="sm:w-1/2">
-					<div
-						class="flex align-top justify-start"
-						v-for="(i, key) in u"
-						:key="key"
-					>
-						<div class="font-bold">{{ key }}:</div>
-						<div class="ml-2">
-							{{ i }}
-						</div>
-					</div>
-				</div>
-				<div class="sm:w-1/2 flex justify-center items-center">
-					<Secondary @click="$emit('addUser', u)">Select</Secondary>
-				</div>
-			</div>
 		</div>
-		<div class="w-full mt-8">
-			<slot></slot>
-		</div>
+		<pre>{{ ticket.jobs }}</pre>
 	</div>
 </template>
 
@@ -132,10 +117,10 @@ export default {
 	},
 	data() {
 		return {
-			email: "",
-			phone: "",
-			people: "",
-			user_id: "",
+			property_id: "",
+			job_id: "",
+			agency_id: "",
+			user_type: "PM",
 		};
 	},
 	methods: {
