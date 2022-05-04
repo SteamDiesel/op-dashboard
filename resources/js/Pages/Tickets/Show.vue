@@ -1,4 +1,6 @@
 <script setup>
+import PageTabs from "../Components/PageTabs.vue";
+import Users from "./Pages/Users.vue";
 </script>
 
 <script>
@@ -22,22 +24,46 @@ export default {
 	data() {
 		return {
 			navigation: [
+				// {
+				// 	name: "Users",
+				// 	href: "ticket/" + this.$page.props.ticket.id + "/users",
+				// 	prefix: "ticket/" + this.$page.props.ticket.id + "/user",
+				// 	icon: UsersIcon,
+				// },
+				// {
+				// 	name: "Jobs",
+				// 	href: "ticket/" + this.$page.props.ticket.id + "/jobs",
+				// 	prefix: "ticket/" + this.$page.props.ticket.id + "/job",
+				// 	icon: FolderIcon,
+				// },
+			],
+			tabs: [
 				{
 					name: "Users",
-					href: "ticket/" + this.$page.props.ticket.id + "/users",
-					prefix: "ticket/" + this.$page.props.ticket.id + "/user",
-					icon: UsersIcon,
+					page: "users",
 				},
 				{
 					name: "Jobs",
-					href: "ticket/" + this.$page.props.ticket.id + "/jobs",
-					prefix: "ticket/" + this.$page.props.ticket.id + "/job",
-					icon: FolderIcon,
+					page: "jobs",
+				},
+				{
+					name: "Data",
+					page: "data",
 				},
 			],
+			active_tab: "users",
 		};
 	},
 	methods: {
+		addUser(u) {
+			console.log("addUser fired");
+			console.log(u);
+			if (this.$page.props.ticket.users == null) {
+				this.$page.props.ticket.users = [];
+			}
+			this.$page.props.ticket.users.push(u);
+			this.saveTicket(this.$page.props.ticket);
+		},
 		addTask() {
 			console.log("adding task");
 			console.log(this.$page.props.ticket);
@@ -74,6 +100,9 @@ export default {
 					console.log(error);
 				});
 		},
+		changeTab(tab) {
+			this.active_tab = tab;
+		},
 	},
 };
 </script>
@@ -96,12 +125,22 @@ export default {
 				:tasks="$attrs.ticket.tasks"
 			></Tasks>
 		</template>
-		<div v-if="!$attrs.ticket" class="flex w-full justify-between">
-			<div>
-				No results retrieved for the ticket number {{ $attrs.query }}
-			</div>
-		</div>
-		<div v-if="$attrs.ticket" class="flex w-full h-full justify-between">
+		<template v-slot:header>
+			<PageTabs
+				:tabs="tabs"
+				:active="active_tab"
+				@change-tab="changeTab"
+			></PageTabs>
+		</template>
+
+		<Users
+			v-if="active_tab == 'users'"
+			:ticket="$attrs.ticket"
+			@save-ticket="saveTicket"
+			@add-user="addUser"
+		></Users>
+		<div v-if="active_tab == 'data'" class="w-full h-full">
+			<h2>Ticket Data</h2>
 			<div class="w-full pl-4">
 				<ObjectNest :val="$attrs.ticket"></ObjectNest>
 			</div>

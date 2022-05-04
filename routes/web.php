@@ -60,9 +60,11 @@ Route::middleware([
     Route::get('/ticket/{ticket}', [TicketController::class, 'show']);
 
     Route::get('/tickets/new', [TicketController::class, 'create']);
-
-    //
     Route::post('/ticket/update/{ticket}', [TicketController::class, 'update']);
+
+    // Ticket API Post Calls
+    Route::post('/ticket/api/getUser', [OurPropertyUser::class, 'fetch']);
+
 
     // Jobs
     Route::get('/jobs', [JobsController::class, 'index']);

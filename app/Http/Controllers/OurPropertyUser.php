@@ -73,26 +73,7 @@ class OurPropertyUser extends Controller
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
 
     /**
      * Display the specified resource.
@@ -121,39 +102,54 @@ class OurPropertyUser extends Controller
             return redirect('/auth/refresh');
         }
     }
-
     /**
-     * Show the form for editing the specified resource.
+     * Display the specified resource.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function fetch(Request $request)
     {
         //
-    }
+        $token = Auth::user()->currentTeam->access_token;
+        $endpoint = env('API_URL') . '/api/GetUserInfo';
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
+        // first get the user
+        if ($request->email) {
+            $response = Http::withToken($token)->acceptJson()
+                ->get($endpoint, [
+                    'Email' => $request->email
+                ]);
+        }
+        if ($request->phone) {
+            $response = Http::withToken($token)->acceptJson()
+                ->get($endpoint, [
+                    'Mobile' => $request->phone,
+                ]);
+        }
+        if ($request->user_id) {
+            $response = Http::withToken($token)->acceptJson()
+                ->get($endpoint, [
+                    'UserID' => $request->user_id
+                ]);
+        }
+        $users = array();
+        if (is_array($response->object()->data)) {
+            $users = $response->object()->data;
+        } else {
+            array_push($users, $response->object()->data);
+        }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        if ($response->successful()) {
+            return response()->json([
+                'users' => $users,
+                'message' => "request was successful, all users are attached as an array."
+            ]);
+        } else {
+            return response()->json([
+                'message' => "The request failed. Maybe this app is not authenticated?"
+            ]);
+        }
     }
 
     /**

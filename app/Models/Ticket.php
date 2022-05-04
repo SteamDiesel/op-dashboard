@@ -17,6 +17,7 @@ class Ticket extends Model
         'title',
         'description',
         'pms',
+        'users',
         'properties',
         'agencies',
         'tenants',
