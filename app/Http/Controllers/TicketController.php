@@ -105,6 +105,7 @@ class TicketController extends Controller
     {
         //
         $ticket->pms = json_decode($ticket->pms);
+        $ticket->users = json_decode($ticket->users);
         $ticket->properties = json_decode($ticket->properties);
         $ticket->agencies = json_decode($ticket->agencies);
         $ticket->tenants = json_decode($ticket->tenants);
@@ -146,6 +147,7 @@ class TicketController extends Controller
         $ticket->title = $data->title;
         $ticket->description = $data->description;
         $ticket->pms = $data->pms;
+        $ticket->users = $data->users;
         $ticket->properties = $data->properties;
         $ticket->agencies = $data->agencies;
         $ticket->tenants = $data->tenants;
