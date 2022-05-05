@@ -65,7 +65,10 @@ Route::middleware([
 
     // Ticket API Post Calls
     Route::post('/ticket/api/getUser', [OurPropertyUser::class, 'fetch']);
-    Route::post('/ticket/api/mergeTradies', [TicketApiController::class, 'mergetradies']);
+    Route::post('/ticket/api/mergeUsers', [TicketApiController::class, 'mergeUsers']);
+    Route::post('/ticket/api/getUserTenancies', [TicketApiController::class, 'getUserTenancies']);
+    Route::post('/ticket/api/getPropertyTenancies', [TicketApiController::class, 'getPropertyTenancies']);
+    Route::post('/ticket/api/getProperties', [TicketApiController::class, 'getProperties']);
 
 
     // Jobs

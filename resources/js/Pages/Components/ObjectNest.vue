@@ -1,5 +1,5 @@
 <template>
-	<div class="text-sm max-w-sm text-ellipsis whitespace-normal">
+	<div class="text-sm text-ellipsis whitespace-normal">
 		<div class="align-top justify-start" v-for="(i, key) in val" :key="key">
 			<div class="flex mt-1" v-if="typeof i !== 'object'">
 				<div class="font-bold">{{ key }}:</div>

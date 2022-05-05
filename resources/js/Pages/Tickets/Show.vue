@@ -4,6 +4,9 @@ import Users from "./Pages/Users.vue";
 import Jobs from "./Pages/Jobs.vue";
 import User from "./Cards/User.vue";
 import MergeTradie from "./Pages/MergeTradie.vue";
+import TradieMenu from "./Cards/TradieMenu.vue";
+import UserCard from "./Dive/User.vue";
+import ObjectCard from "./Dive/Object.vue";
 </script>
 
 <script>
@@ -46,8 +49,8 @@ export default {
 					page: "users",
 				},
 				{
-					name: "Jobs",
-					page: "jobs",
+					name: "Dive",
+					page: "dive",
 				},
 				{
 					name: "Data",
@@ -67,8 +70,13 @@ export default {
 			this.$page.props.ticket.users.push(u);
 			this.saveTicket(this.$page.props.ticket);
 		},
-		dropUser(index) {
+		dropUser(user) {
+			console.log(user);
+			let index = this.$page.props.ticket.users.findIndex((u) => {
+				return u.UserID == user.UserID;
+			});
 			console.log(index);
+
 			this.$page.props.ticket.users.splice(index, 1);
 			this.saveTicket(this.$page.props.ticket);
 		},
@@ -156,18 +164,12 @@ export default {
 				v-for="(u, index) in $attrs.ticket.users"
 				:key="index"
 				:user="u"
-				@action-merge-tradie="actionMergeTradie"
-				@drop-user="dropUser"
 			>
-				<button
-					@click="dropUser(index)"
-					:class="[
-						active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-						'flex px-4 py-2 text-sm w-full justify-center',
-					]"
-				>
-					<span>Drop</span>
-				</button>
+				<TradieMenu
+					:user="u"
+					@action-merge-tradie="actionMergeTradie"
+					@drop-user="dropUser"
+				></TradieMenu>
 			</User>
 		</Users>
 		<Jobs
@@ -176,6 +178,29 @@ export default {
 			@save-ticket="saveTicket"
 			@add-user="addUser"
 		></Jobs>
+
+		<div
+			v-if="active_tab == 'dive'"
+			class="w-full h-full grid grid-cols-1 gap-4 divide-y"
+		>
+			<div>
+				<h2 class="font-semibold">Dive</h2>
+				<p class="text-sm">
+					Use this page to retrieve and explore related objects.
+				</p>
+			</div>
+			<ObjectCard v-if="$attrs.ticket.users" name="Users">
+				<UserCard
+					v-for="(u, index) in $attrs.ticket.users"
+					:key="index"
+					:user="u"
+					@save-ticket="saveTicket"
+				></UserCard>
+			</ObjectCard>
+			<ObjectCard v-if="$attrs.ticket.properties" name="Properties">
+				Properties
+			</ObjectCard>
+		</div>
 		<div v-if="active_tab == 'data'" class="w-full h-full">
 			<h2>Ticket Data</h2>
 			<div class="w-full pl-4">

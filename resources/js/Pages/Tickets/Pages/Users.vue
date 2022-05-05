@@ -1,8 +1,8 @@
 <template>
 	<div>
-		<div class="flex gap-8">
+		<div class="flex gap-4">
 			<div class="max-w-xs">
-				<label class="block text-sm font-medium text-gray-700"
+				<label class="sr-only text-sm font-medium text-gray-700"
 					>User email</label
 				>
 				<div class="mt-1 flex">
@@ -10,7 +10,8 @@
 						autocomplete="off"
 						type="email"
 						v-model="email"
-						@keydown.enter="byEmail"
+						@change="clearFields('email')"
+						@keydown.enter="enterSearch('email')"
 						class="
 							shadow-sm
 							max-w-xs
@@ -23,15 +24,15 @@
 							p-2
 							mr-2
 						"
-						placeholder="eg. l_somerville@outlook.com"
-						aria-describedby="user's email address"
+						placeholder="Email Address"
+						aria-describedby="email address"
 					/>
 
-					<Primary @click="byEmail">Find</Primary>
+					<!-- <Primary @click="byEmail">Find</Primary> -->
 				</div>
 			</div>
 			<div class="max-w-xs">
-				<label class="block text-sm font-medium text-gray-700"
+				<label class="sr-only text-sm font-medium text-gray-700"
 					>User Mobile number</label
 				>
 				<div class="mt-1 flex">
@@ -39,7 +40,8 @@
 						autocomplete="off"
 						type="text"
 						v-model="phone"
-						@keydown.enter="byPhone"
+						@change="clearFields('phone')"
+						@keydown.enter="enterSearch('phone')"
 						class="
 							shadow-sm
 							max-w-xs
@@ -52,15 +54,15 @@
 							p-2
 							mr-2
 						"
-						placeholder="eg. 0400696332"
+						placeholder="Mobile Number"
 						aria-describedby="user's phone number"
 					/>
 
-					<Primary @click="byPhone">Find</Primary>
+					<!-- <Primary @click="byPhone">Find</Primary> -->
 				</div>
 			</div>
 			<div class="max-w-xs">
-				<label class="block text-sm font-medium text-gray-700"
+				<label class="sr-only text-sm font-medium text-gray-700"
 					>User ID</label
 				>
 				<div class="mt-1 flex">
@@ -68,7 +70,8 @@
 						autocomplete="off"
 						type="text"
 						v-model="user_id"
-						@keydown.enter="byId"
+						@change="clearFields('user_id')"
+						@keydown.enter="enterSearch('user_id')"
 						class="
 							shadow-sm
 							max-w-xs
@@ -81,13 +84,16 @@
 							p-2
 							mr-2
 						"
-						placeholder="eg. 77356"
+						placeholder="User ID"
 						aria-describedby="user's ID number"
 					/>
-
-					<Primary @click="byId">Find</Primary>
 				</div>
 			</div>
+			<Primary
+				@click="search"
+				title="You can also just hit enter in the field you want to search from."
+				>Search</Primary
+			>
 		</div>
 		<div v-if="people.length" class="flex mt-4 flex-col gap-4">
 			<p>
@@ -139,67 +145,41 @@ export default {
 		};
 	},
 	methods: {
-		byEmail() {
-			console.log("byemail");
+		enterSearch(field) {
+			this.clearFields(field);
+			this.search();
+		},
+
+		clearFields(field) {
+			switch (field) {
+				case "email":
+					(this.phone = ""), (this.user_id = ""), (this.people = []);
+					break;
+				case "phone":
+					(this.email = ""), (this.user_id = ""), (this.people = []);
+					break;
+				case "user_id":
+					(this.phone = ""), (this.email = ""), (this.people = []);
+					break;
+			}
+		},
+
+		search() {
+			console.log("search");
 			this.people = [];
 			axios
 				.post("/ticket/api/getUser", {
 					email: this.email,
-				})
-				.then((response) => {
-					console.log(response.data.message);
-					console.log(response.data.users);
-					let $users = response.data.users;
-					if ($users.length > 1) {
-						console.log("greater than 1");
-						this.people = response.data.users;
-					} else {
-						console.log("1 or less");
-						this.$emit("addUser", $users[0]);
-					}
-				})
-				.catch((error) => {
-					console.log(error);
-				});
-		},
-		byPhone() {
-			console.log("byphone");
-			this.people = [];
-			axios
-				.post("/ticket/api/getUser", {
 					phone: this.phone,
-				})
-				.then((response) => {
-					console.log(response.data.message);
-					console.log(response.data.users);
-					let $users = response.data.users;
-					if ($users.length > 1) {
-						console.log("greater than 1");
-						this.people = response.data.users;
-					} else {
-						$emit("addUser", $users[0]);
-					}
-				})
-				.catch((error) => {
-					console.log(error);
-				});
-		},
-		byId() {
-			this.people = [];
-			console.log("byID");
-			axios
-				.post("/ticket/api/getUser", {
 					user_id: this.user_id,
 				})
 				.then((response) => {
-					console.log(response.data.message);
+					console.log(response.data);
 					console.log(response.data.users);
 					let $users = response.data.users;
 					if ($users.length > 1) {
-						console.log("greater than 1");
 						this.people = response.data.users;
 					} else {
-						console.log("1 or less");
 						this.$emit("addUser", $users[0]);
 					}
 				})

@@ -116,18 +116,21 @@ class OurPropertyUser extends Controller
 
         // first get the user
         if ($request->email) {
+
             $response = Http::withToken($token)->acceptJson()
                 ->get($endpoint, [
                     'Email' => $request->email
                 ]);
         }
         if ($request->phone) {
+
             $response = Http::withToken($token)->acceptJson()
                 ->get($endpoint, [
                     'Mobile' => $request->phone,
                 ]);
         }
         if ($request->user_id) {
+
             $response = Http::withToken($token)->acceptJson()
                 ->get($endpoint, [
                     'UserID' => $request->user_id
@@ -153,7 +156,7 @@ class OurPropertyUser extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Get the Properties for the Users and return in a table view.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response

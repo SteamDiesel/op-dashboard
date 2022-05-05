@@ -9,11 +9,11 @@ use Illuminate\Support\Facades\Http;
 class TicketApiController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Merge Users together. accepts one parent and multiple children.
      *
      * @return \Illuminate\Http\Response
      */
-    public function mergetradies(Request $request)
+    public function mergeUsers(Request $request)
     {
         //
         // return $request;
@@ -21,11 +21,11 @@ class TicketApiController extends Controller
         $children = implode(",", $request->children);
         return $request;
 
-        $endpoint = env('API_URL') . '/api/mergeTradies';
+        $endpoint = env('API_URL') . '/api/mergeUsers';
         $response = Http::withToken(Auth::user()->currentTeam->access_token)->acceptJson()
             ->post($endpoint, [
-                "parent" => "email@gmail.com", // valid tradie account
-                "children" => ["email1@email.com", "email2@email.com"] // array of emails
+                "parent" => "854775", // valid user account ID
+                "children" => ["885669", "887995"] // array of IDs
             ]);
         return $response;
 
@@ -57,5 +57,156 @@ class TicketApiController extends Controller
             ]);
         }
         // return response()->json(["user" => "user"]);
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getPropertyTenancies(Request $request)
+    {
+        //
+        $endpoint = env('API_URL') . '/api/GetTenantInfo';
+        foreach ($ids as $id) {
+            $response = Http::withToken(Auth::user()->currentTeam->access_token)->acceptJson()
+                ->get($endpoint, [
+                    "UserID" => $id
+                ]);
+            if ($response->successful()) {
+                array_push($tenants, $response->object()->data);
+            }
+        }
+        return $tenants;
+
+        $endpoint = env('API_URL') . '/api/GetTenantInfo';
+        $response = Http::withToken(Auth::user()->currentTeam->access_token)->acceptJson()
+            ->get($endpoint, [
+                "UserID" => $request->id
+            ]);
+        // return $response;
+
+        if ($response->successful()) {
+            if (is_array($response->object()->data)) {
+                return response()->json([
+                    'success' => true,
+                    'message' => "The request was successful. Array",
+                    'tcy' => $response->object()->data
+                ]);
+            }
+            if (is_object($response->object()->data)) {
+                $ar = [];
+                array_push($ar, $response->object()->data);
+                return response()->json([
+                    'success' => true,
+                    'message' => "The request was successful. Object",
+                    'tcy' => $ar
+                ]);
+            }
+            return response()->json([
+                'success' => true,
+                'message' => "The request was successful. Other, maybe XML?",
+                'tcy' => $response->object()->data
+            ]);
+        } else {
+            return response()->json([
+                "success" => false,
+                'message' => "The request failed at the API Endpoint.",
+                'tcy' => $response->object()->data
+            ]);
+        }
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getUserTenancies(Request $request)
+    {
+        //
+        // return $request;
+
+        $endpoint = env('API_URL') . '/api/GetTenantInfo';
+        $response = Http::withToken(Auth::user()->currentTeam->access_token)->acceptJson()
+            ->get($endpoint, [
+                "UserID" => $request->id
+            ]);
+        // return $response;
+
+        if ($response->successful()) {
+            if (is_array($response->object()->data)) {
+                return response()->json([
+                    'success' => true,
+                    'message' => "The request was successful. Array",
+                    'tcy' => $response->object()->data
+                ]);
+            }
+            if (is_object($response->object()->data)) {
+                $ar = [];
+                array_push($ar, $response->object()->data);
+                return response()->json([
+                    'success' => true,
+                    'message' => "The request was successful. Object",
+                    'tcy' => $ar
+                ]);
+            }
+            return response()->json([
+                'success' => true,
+                'message' => "The request was successful. Other, maybe XML?",
+                'tcy' => $response->object()->data
+            ]);
+        } else {
+            return response()->json([
+                "success" => false,
+                'message' => "The request failed at the API Endpoint.",
+                'tcy' => $response->object()->data
+            ]);
+        }
+    }
+
+
+    /**
+     * get and return the properties of a given user.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function getProperties(Request $request)
+    {
+        $endpoint = env('API_URL') . '/api/GetPropertyInfo';
+        $response = Http::withToken(Auth::user()->currentTeam->access_token)->acceptJson()
+            ->get($endpoint, [
+                'TenantID' => $request->user_id
+            ]);
+        if ($response->successful()) {
+            if (is_array($response->object()->data)) {
+                return response()->json([
+                    'success' => true,
+                    'message' => "The request was successful. Array",
+                    'pty' => $response->object()->data
+                ]);
+            }
+            if (is_object($response->object()->data)) {
+                $ar = [];
+                array_push($ar, $response->object()->data);
+                return response()->json([
+                    'success' => true,
+                    'message' => "The request was successful. Object",
+                    'pty' => $ar
+                ]);
+            }
+            return response()->json([
+                'success' => true,
+                'message' => "The request was successful. Other, maybe XML?",
+                'pty' => $response->object()->data
+            ]);
+        } else {
+            return response()->json([
+                "success" => false,
+                'message' => "The request failed at the API Endpoint.",
+                'pty' => $response->object()->data
+            ]);
+        }
     }
 }
