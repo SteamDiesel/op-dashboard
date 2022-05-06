@@ -63,11 +63,14 @@ export default {
 	methods: {
 		addUser(u) {
 			console.log("addUser fired");
+
 			console.log(u);
 			if (this.$page.props.ticket.users == null) {
 				this.$page.props.ticket.users = [];
 			}
-			this.$page.props.ticket.users.push(u);
+			if (u !== null) {
+				this.$page.props.ticket.users.push(u);
+			}
 			this.saveTicket(this.$page.props.ticket);
 		},
 		dropUser(user) {
