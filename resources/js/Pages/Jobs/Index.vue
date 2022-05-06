@@ -17,7 +17,6 @@ export default {
 			property_id: "",
 			job_id: "",
 			agency_id: "",
-			user_type: "PM",
 		};
 	},
 	computed: {
@@ -26,8 +25,20 @@ export default {
 		},
 	},
 	methods: {
-		byAddress() {},
-		byAgency() {},
+		byProperty() {
+			Inertia.get(
+				"/jobs",
+				{ property_id: this.property_id },
+				{ preserveState: true }
+			);
+		},
+		byAgency() {
+			Inertia.get(
+				"/jobs",
+				{ agency_id: this.agency_id },
+				{ preserveState: true }
+			);
+		},
 		byJobID() {
 			Inertia.visit("/job/" + this.job_id);
 		},

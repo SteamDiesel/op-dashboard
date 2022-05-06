@@ -95,7 +95,7 @@
 				>Search</Primary
 			>
 		</div>
-		<div v-if="people.length" class="flex mt-4 flex-col gap-4">
+		<div v-if="people[1]" class="flex mt-4 flex-col gap-4">
 			<p>
 				Your search returned multiple results, select the one you want.
 			</p>

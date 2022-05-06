@@ -132,6 +132,7 @@ export default {
 		:title="'Ticket: ' + $attrs.ticket.title"
 		:navigation="navigation"
 	>
+		<!-- Named slots -->
 		<template v-slot:sidebar>
 			<Sidebar
 				@save-ticket="saveTicket"
@@ -152,6 +153,11 @@ export default {
 			></PageTabs>
 		</template>
 
+		<!--  -->
+		<!-- Base slot -->
+		<!--  -->
+
+		<!-- Users -->
 		<Users
 			v-if="active_tab == 'users'"
 			:ticket="$attrs.ticket"
@@ -159,26 +165,29 @@ export default {
 			@add-user="addUser"
 			@action-merge-tradie="actionMergeTradie"
 		>
-			<User
-				class="mb-4"
-				v-for="(u, index) in $attrs.ticket.users"
-				:key="index"
-				:user="u"
-			>
-				<TradieMenu
+			<div v-if="$attrs.ticket.users">
+				<User
+					class="mb-4"
+					v-for="(u, index) in $attrs.ticket.users"
+					:key="index"
 					:user="u"
-					@action-merge-tradie="actionMergeTradie"
-					@drop-user="dropUser"
-				></TradieMenu>
-			</User>
+				>
+					<TradieMenu
+						:user="u"
+						@action-merge-tradie="actionMergeTradie"
+						@drop-user="dropUser"
+					></TradieMenu>
+				</User>
+			</div>
 		</Users>
+		<!-- Jobs -->
 		<Jobs
 			v-if="active_tab == 'jobs'"
 			:ticket="$attrs.ticket"
 			@save-ticket="saveTicket"
 			@add-user="addUser"
 		></Jobs>
-
+		<!-- Dive -->
 		<div
 			v-if="active_tab == 'dive'"
 			class="w-full h-full grid grid-cols-1 gap-4 divide-y"
@@ -201,12 +210,14 @@ export default {
 				Properties
 			</ObjectCard>
 		</div>
+		<!-- Data -->
 		<div v-if="active_tab == 'data'" class="w-full h-full">
 			<h2>Ticket Data</h2>
 			<div class="w-full pl-4">
 				<ObjectNest :val="$attrs.ticket"></ObjectNest>
 			</div>
 		</div>
+		<!-- Merge User -->
 		<MergeTradie
 			v-if="active_tab == 'merge_tradie'"
 			:ticket="$attrs.ticket"
