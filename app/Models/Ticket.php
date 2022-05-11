@@ -30,7 +30,7 @@ class Ticket extends Model
     /**
      * Get the user associated with the Ticket
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function user()
     {
@@ -39,7 +39,7 @@ class Ticket extends Model
     /**
      * Get the team associated with the Ticket
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function team()
     {

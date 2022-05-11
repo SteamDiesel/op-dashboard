@@ -2,26 +2,23 @@
 
 namespace App\Nova;
 
-
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rules;
-use Laravel\Nova\Fields\Gravatar;
 use Laravel\Nova\Fields\ID;
-use Laravel\Nova\Fields\Password;
 use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Fields\BelongsTo;
-use Laravel\Nova\Fields\BelongsToMany;
+use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\HasMany;
+use Laravel\Nova\Fields\HasOne;
+use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
-class User extends Resource
+class Team extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static $model = \App\Models\User::class;
+    public static $model = \App\Models\Team::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -36,7 +33,7 @@ class User extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'name', 'email',
+        'id', 'name'
     ];
 
     /**
@@ -49,27 +46,12 @@ class User extends Resource
     {
         return [
             ID::make()->sortable(),
-
-            Gravatar::make()->maxWidth(50),
-
-            Text::make('Name')
-                ->sortable()
-                ->rules('required', 'max:255'),
-
-            Text::make('Email')
-                ->sortable()
-                ->rules('required', 'email', 'max:254')
-                ->creationRules('unique:users,email')
-                ->updateRules('unique:users,email,{{resourceId}}'),
-
-            Password::make('Password')
-                ->onlyOnForms()
-                ->creationRules('required', Rules\Password::defaults())
-                ->updateRules('nullable', Rules\Password::defaults()),
-
-            BelongsTo::make('Current Team', 'currentTeam', 'App\Nova\Team'),
-            BelongsToMany::make('Available Teams', 'teams', 'App\Nova\Team'),
-            HasMany::make('Tickets', 'tickets', 'App\Nova\Ticket'),
+            Text::make('Name')->sortable(),
+            HasOne::make('Owner', 'owner', 'App\Nova\User')->sortable(),
+            Boolean::make('Personal Team', 'personal_team')->sortable(),
+            Text::make('ClientID', 'client_id'),
+            Text::make('ClientSecret', 'client_secret')->hideFromIndex(),
+            HasMany::make('Tickets')->hideFromIndex(),
 
         ];
     }
@@ -116,5 +98,14 @@ class User extends Resource
     public function actions(NovaRequest $request)
     {
         return [];
+    }
+    /**
+     * Determine if the given resource is authorizable.
+     *
+     * @return bool
+     */
+    public static function authorizable()
+    {
+        return false;
     }
 }
