@@ -138,6 +138,7 @@ export default {
 		<!-- Named slots -->
 		<template v-slot:sidebar>
 			<Sidebar
+				:team="$attrs.team"
 				@save-ticket="saveTicket"
 				:ticket="$attrs.ticket"
 			></Sidebar>

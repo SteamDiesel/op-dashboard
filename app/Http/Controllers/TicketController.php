@@ -113,8 +113,12 @@ class TicketController extends Controller
         $ticket->tradies = json_decode($ticket->tradies);
         $ticket->snapshot = json_decode($ticket->snapshot);
         $ticket->tasks = json_decode($ticket->tasks);
+        $ticket->user;
+        $team = Auth::User()->currentTeam->makeHidden(['client_secret', 'client_id', 'access_token', 'token_type', 'refresh_token']);
+        $team->allUsers();
         return Inertia::render('Tickets/Show', [
-            'ticket' => $ticket
+            'ticket' => $ticket,
+            'team' => $team
         ]);
     }
 
@@ -156,13 +160,15 @@ class TicketController extends Controller
         $ticket->snapshot = $data->snapshot;
         $ticket->tasks = $data->tasks;
 
-        $ticket->save();
-        // return "updated";
-
-        return response()->json([
-            'message' => 'Ticket Updated',
-            'ticket' => $ticket
-        ]);
+        if ($ticket->save()) {
+            return response()->json([
+                'message' => 'Ticket Updated',
+            ]);
+        } else {
+            return response()->json([
+                'message' => 'Failed to Update Ticket.',
+            ]);
+        }
     }
 
     /**
