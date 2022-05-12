@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreTicketRequest;
 use App\Http\Requests\UpdateTicketRequest;
+use App\Models\Activity;
 use App\Models\Ticket;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -32,6 +33,7 @@ class TicketController extends Controller
     public function closed_index()
     {
         //
+
         $tickets = Ticket::whereUserId(Auth::user()->id)->where('is_open', 0)->with(['user:id,name,profile_photo_path'])->orderBy('updated_at', 'desc')->get();
 
         return Inertia::render('Tickets/Index', [
@@ -81,6 +83,16 @@ class TicketController extends Controller
         $ticket->user()->associate($user);
         $ticket->team()->associate($user->currentTeam);
         $ticket->save();
+        $a = new Activity;
+        $a->user()->associate($user);
+        $a->team()->associate($user->currentTeam);
+        $a->ticket()->associate($ticket);
+        $a->type = "Create";
+        $a->endpoint = "NA";
+        $a->parameters = "NA";
+        $a->result = "Success";
+        $a->details = "New Ticket Created.";
+        $a->save();
         return redirect('/ticket/' . $ticket->id);
     }
 
@@ -122,6 +134,39 @@ class TicketController extends Controller
         ]);
     }
 
+    /**
+     * Show the page for activity of the specified resource.
+     *
+     * @param  \App\Models\Ticket  $ticket
+     * @return \Illuminate\Http\Response
+     */
+    public function activity(Ticket $ticket)
+    {
+        $activity = $ticket->activity;
+        return Inertia::render('Tickets/Pages/Activity', [
+            "activity" => $activity
+        ]);
+    }
+    /**
+     * Show the page for activity of the specified resource.
+     *
+     * @param  \App\Models\Ticket  $ticket
+     * @return \Illuminate\Http\Response
+     */
+    public function users(Ticket $ticket)
+    {
+        return Inertia::render('Tickets/Pages/Users');
+    }
+    /**
+     * Show the page for activity of the specified resource.
+     *
+     * @param  \App\Models\Ticket  $ticket
+     * @return \Illuminate\Http\Response
+     */
+    public function dive(Ticket $ticket)
+    {
+        return Inertia::render('Tickets/Pages/Dive');
+    }
     /**
      * Show the form for editing the specified resource.
      *

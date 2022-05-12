@@ -4,31 +4,25 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Ticket extends Model
+class Activity extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'user_id',
         'team_id',
-        'is_open',
-        'linked_ticket_id',
-        'title',
-        'description',
-        'pms',
-        'users',
-        'properties',
-        'agencies',
-        'tenants',
-        'owners',
-        'tradies',
-        'snapshot',
-        'tasks',
+        'ticket_id', //nullable
+        'type',
+        'endpoint', //nullable
+        'parameters', //nullable
+        'result',
+        'details', //nullable
     ];
 
     /**
-     * Get the user associated with the Ticket
+     * Get the user associated with the Activity
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -37,7 +31,7 @@ class Ticket extends Model
         return $this->belongsTo(User::class);
     }
     /**
-     * Get the team associated with the Ticket
+     * Get the team associated with the Activity
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -46,12 +40,12 @@ class Ticket extends Model
         return $this->belongsTo(Team::class);
     }
     /**
-     * Get the Activity associated with the Ticket
+     * Get the ticket associated with the Activity
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function activity()
+    public function ticket()
     {
-        return $this->hasMany(Activity::class);
+        return $this->belongsTo(Ticket::class);
     }
 }

@@ -181,13 +181,12 @@
 							px-4
 							py-3
 							bg-slate-500
+							text-gray-700
+							hover:text-indigo-700
 						"
 					>
-						<img
-							class="h-10 w-auto"
-							src="/images/logo2-1.png"
-							alt="Workflow"
-						/>
+						<LogoutIcon class="h-10 rotate-180" />
+						<div class="ml-2 font-bold">Tickets</div>
 					</Link>
 					<div>
 						<slot name="sidebar"></slot>
@@ -337,7 +336,7 @@ import {
 	TransitionChild,
 	TransitionRoot,
 } from "@headlessui/vue";
-import { MenuIcon, XIcon } from "@heroicons/vue/outline";
+import { MenuIcon, XIcon, LogoutIcon } from "@heroicons/vue/outline";
 
 export default {
 	props: {
@@ -354,6 +353,7 @@ export default {
 		XIcon,
 		Link,
 		Head,
+		LogoutIcon,
 	},
 	setup() {
 		const sidebarOpen = ref(false);

@@ -27,7 +27,7 @@
 									rounded-full
 									h-7
 									border border-gray-400
-									hover:border-purple-700
+									hover:border-indigo-700
 								"
 								:src="u.profile_photo_url"
 								:alt="u.name"
@@ -39,22 +39,22 @@
 				<div>
 					<button
 						title="Close the ticket"
-						class="border rounded-md hover:border-purple-700"
+						class="border rounded-md hover:border-indigo-700"
 						v-if="ticket.is_open"
 						@click="toggleClosed(false)"
 					>
 						<CheckIcon
-							class="h-7 hover:text-purple-700 text-gray-400"
+							class="h-7 hover:text-indigo-700 text-gray-400"
 						/>
 					</button>
 					<button
-						class="border rounded-md hover:border-purple-700"
+						class="border rounded-md hover:border-indigo-700"
 						title="Re-open the ticket"
 						v-if="!ticket.is_open"
 						@click="toggleClosed(true)"
 					>
 						<InboxInIcon
-							class="h-7 hover:text-purple-700 text-gray-400"
+							class="h-7 hover:text-indigo-700 text-gray-400"
 						/>
 					</button>
 				</div>

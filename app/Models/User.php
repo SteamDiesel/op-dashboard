@@ -68,4 +68,13 @@ class User extends Authenticatable
     {
         return $this->hasMany(Ticket::class);
     }
+    /**
+     * Get the Activity associated with the User
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function activity()
+    {
+        return $this->hasMany(Activity::class);
+    }
 }

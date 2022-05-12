@@ -33,37 +33,7 @@
 				</div>
 			</div>
 		</td>
-		<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-			<div
-				class="
-					max-w-xs
-					text-ellipsis
-					overflow-hidden
-					font-semibold
-					text-gray-900
-				"
-				v-if="ticket.agencies"
-			>
-				<div v-for="a in ticket.agencies" :key="a.AgencyID">
-					{{ a.AgencyName }}
-				</div>
-			</div>
-			<div
-				class="
-					max-w-xs
-					text-ellipsis
-					overflow-hidden
-					font-semibold
-					text-gray-900
-				"
-				v-if="ticket.pms"
-			>
-				<div v-for="p in ticket.pms" :key="p.UserID">
-					{{ p.FirstName }}
-					{{ p.LastName }}
-				</div>
-			</div>
-		</td>
+
 		<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
 			<div class="max-w-xs text-ellipsis overflow-hidden text-gray-500">
 				<img
@@ -73,27 +43,36 @@
 				/>
 			</div>
 		</td>
-
+		<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+			{{ timestamp(ticket.created_at) }}
+		</td>
 		<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
 			{{ timestamp(ticket.updated_at) }}
 		</td>
 
 		<td
 			class="
-				relative
 				whitespace-nowrap
-				py-4
-				pl-3
-				pr-4
+				flex flex-col
+				items-center
+				justify-center
+				h-24
 				text-right text-sm
 				font-medium
-				sm:pr-6
 			"
 		>
 			<Link
 				:href="'/ticket/' + ticket.id"
-				class="text-indigo-600 hover:text-indigo-900"
-				>View<span class="sr-only">
+				class="
+					text-gray-700
+					hover:text-indigo-700
+					w-full
+					flex-col
+					px-4
+					py-4
+					justify-center
+				"
+				><LoginIcon class="h-10 rotate-180" /><span class="sr-only">
 					ticket with ticket ID {{ ticket.id }}</span
 				></Link
 			>
@@ -103,9 +82,13 @@
 
 <script>
 import dayjs from "dayjs";
+import { LoginIcon } from "@heroicons/vue/outline";
 export default {
 	setup() {
 		return {};
+	},
+	components: {
+		LoginIcon,
 	},
 	props: {
 		ticket: Object,

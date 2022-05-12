@@ -37,6 +37,18 @@ class Team extends JetstreamTeam
         'refresh_token',
         'expires_in',
     ];
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'access_token',
+        'token_type',
+        'scope',
+        'refresh_token',
+        'expires_in'
+    ];
 
     /**
      * The event map for the model.
