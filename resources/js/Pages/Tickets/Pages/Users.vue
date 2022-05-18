@@ -206,7 +206,7 @@ export default {
 					if ($users.length > 1) {
 						this.people = response.data.users;
 					} else {
-						this.$emit("addUser", $users[0]);
+						this.addUser($users[0]);
 					}
 				})
 				.catch((error) => {

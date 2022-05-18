@@ -4,50 +4,47 @@
 		<div class="w-full text-sm">
 			<div class="w-full">
 				<span class="font-semibold"
-					>Property: {{ property.Address1 }} {{ property.Address2 }}
-					{{ property.Suburb }} {{ property.Postcode }}</span
-				>
-				ID:{{ property.PropertyID }}
+					>Job: {{ job.Title }} - {{ job.Type }}
+				</span>
 
 				<span
 					class="
-						bg-green-200
-						text-green-700
+						bg-gray-200
+						text-gray-700
 						font-semibold
 						rounded-full
 						px-1
+						ml-2
 						text-xs
 					"
-					v-if="property.Active == 1"
-					>Active</span
+					>{{ job.Status }}</span
 				>
 			</div>
+			<div class="text-gray-500" :title="timeStamp(job.Created)">
+				Created by {{ job.Creator[0].Name }}
+				{{ timeForHumans(job.Created) }}
+			</div>
 
-			<!-- <div class="w-full text-sm">
-				PM: {{ property.ManagerID }} | Agency ID:
-				{{ property.AgencyID }} | Owner IDs: {{ property.OwnerIDs }} |
-				Tenant IDs: {{ property.TenantIDs }}
-			</div> -->
+			<div class="w-full text-sm">at {{ job.Property[0].Address1 }}</div>
 		</div>
 		<!-- related objects -->
 		<div class="w-full flex">
 			<div class="w-8">
 				<ChevronDoubleDown
 					@click="expand"
-					v-if="!property.expanded"
+					v-if="!job.expanded"
 					class="h-5 text-gray-500"
 				></ChevronDoubleDown>
 				<ChevronDoubleUp
-					@click="property.expanded = !property.expanded"
-					v-if="property.expanded"
+					@click="job.expanded = !job.expanded"
+					v-if="job.expanded"
 					class="h-5 text-gray-500"
 				></ChevronDoubleUp>
 			</div>
-			<div v-if="property.expanded">
-				<!-- Property Options -->
-				<div class="gap-2">
-					<Tenancies :parent="property"></Tenancies>
-					<Jobs :parent="property"></Jobs>
+			<div v-if="job.expanded">
+				<!-- job Options -->
+				<div class="flex gap-2">
+					<!-- <Propertyjob :property="property"></Propertyjob> -->
 				</div>
 			</div>
 		</div>
@@ -59,22 +56,16 @@ import ChevronDoubleRight from "../../Buttons/ChevronDoubleRight.vue";
 import ChevronDoubleLeft from "../../Buttons/ChevronDoubleLeft.vue";
 import ChevronDoubleDown from "../../Buttons/ChevronDoubleDown.vue";
 import ChevronDoubleUp from "../../Buttons/ChevronDoubleUp.vue";
-import Tenancies from "./Fetchers/Tenancies.vue";
-import Jobs from "./Fetchers/Jobs.vue";
-import Tenancy from "./Tenancy.vue";
-
+import { timeStamp, timeForHumans } from "../../Helpers";
 export default {
 	props: {
-		property: Object,
+		job: Object,
 	},
 	components: {
 		ChevronDoubleRight,
 		ChevronDoubleLeft,
 		ChevronDoubleDown,
 		ChevronDoubleUp,
-		Tenancies,
-		Jobs,
-		Tenancy,
 	},
 	data() {
 		return {
@@ -82,8 +73,10 @@ export default {
 		};
 	},
 	methods: {
+		timeStamp,
+		timeForHumans,
 		expand() {
-			this.property.expanded = true;
+			this.job.expanded = true;
 		},
 	},
 };

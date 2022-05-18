@@ -44,29 +44,26 @@
 			</div>
 			<div class="w-full" v-if="user.expanded">
 				<!-- Tenant options -->
-				<div class="flex gap-2" v-if="user.UserType == 't'">
-					<UserTenancy :user="user"></UserTenancy>
-					<Property :user="user"></Property>
+				<div class="gap-2" v-if="user.UserType == 't'">
+					<!-- <UserTenancy :user="user"></UserTenancy> -->
+					<Properties
+						:parent="user"
+						:user_id="user.UserID"
+					></Properties>
 				</div>
 				<!-- Landlord Options -->
-				<div class="flex gap-2" v-if="user.UserType == 'll'">
-					<Property :user="user"></Property>
+				<div class="gap-2" v-if="user.UserType == 'll'">
+					<Properties
+						:parent="user"
+						:user_id="user.UserID"
+					></Properties>
 				</div>
 				<!-- Tradie Options -->
-				<div class="flex gap-2" v-if="user.UserType == 'tr'">
+				<div class="gap-2" v-if="user.UserType == 'tr'">
 					Tradie Options
 				</div>
 				<!-- PM Options -->
-				<div class="flex gap-2" v-if="user.UserType == 'pm'">
-					PM Options
-				</div>
-				<div class="w-full">
-					<PropertyCard
-						v-for="(p, index) in user.properties"
-						:key="index"
-						:property="p"
-					></PropertyCard>
-				</div>
+				<div class="gap-2" v-if="user.UserType == 'pm'">PM Options</div>
 			</div>
 		</div>
 	</div>
@@ -78,7 +75,7 @@ import ChevronDoubleLeft from "../../Buttons/ChevronDoubleLeft.vue";
 import ChevronDoubleDown from "../../Buttons/ChevronDoubleDown.vue";
 import ChevronDoubleUp from "../../Buttons/ChevronDoubleUp.vue";
 import UserTenancy from "./Fetchers/UserTenancy.vue";
-import Property from "./Fetchers/Property.vue";
+import Properties from "./Fetchers/Properties.vue";
 import PropertyCard from "./Property.vue";
 
 export default {
@@ -91,7 +88,7 @@ export default {
 		ChevronDoubleDown,
 		ChevronDoubleUp,
 		UserTenancy,
-		Property,
+		Properties,
 		PropertyCard,
 	},
 	data() {

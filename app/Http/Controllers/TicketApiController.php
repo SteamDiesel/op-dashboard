@@ -209,4 +209,49 @@ class TicketApiController extends Controller
             ]);
         }
     }
+
+
+    /**
+     * get and return the properties of a given user.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function getPropertyJobs(Request $request)
+    {
+        $endpoint = env('API_URL') . '/api/JobRetrieve';
+        $response = Http::withToken(Auth::user()->currentTeam->access_token)->acceptJson()
+            ->get($endpoint, [
+                'PropertyID' => $request->property_id
+            ]);
+        if ($response->successful()) {
+            if (is_array($response->object()->data)) {
+                return response()->json([
+                    'success' => true,
+                    'message' => "The request was successful. Array",
+                    'jobs' => $response->object()->data
+                ]);
+            }
+            if (is_object($response->object()->data)) {
+                $ar = [];
+                array_push($ar, $response->object()->data);
+                return response()->json([
+                    'success' => true,
+                    'message' => "The request was successful. Object",
+                    'jobs' => $ar
+                ]);
+            }
+            return response()->json([
+                'success' => true,
+                'message' => "The request was successful. Other, maybe XML?",
+                'jobs' => $response->object()->data
+            ]);
+        } else {
+            return response()->json([
+                "success" => false,
+                'message' => "The request failed at the API Endpoint.",
+                'jobs' => []
+            ]);
+        }
+    }
 }

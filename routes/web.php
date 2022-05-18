@@ -72,6 +72,7 @@ Route::middleware([
     Route::post('/ticket/api/getUserTenancies', [TicketApiController::class, 'getUserTenancies']);
     Route::post('/ticket/api/getPropertyTenancies', [TicketApiController::class, 'getPropertyTenancies']);
     Route::post('/ticket/api/getProperties', [TicketApiController::class, 'getProperties']);
+    Route::post('/ticket/api/getPropertyJobs', [TicketApiController::class, 'getPropertyJobs']);
 
 
     // Jobs

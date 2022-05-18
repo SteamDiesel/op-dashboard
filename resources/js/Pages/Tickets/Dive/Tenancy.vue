@@ -7,6 +7,7 @@
 					>Tenancy: {{ tenancy.FirstName }} {{ tenancy.LastName }} at
 					{{ tenancy.Address1 }}
 				</span>
+				<span> | User ID:{{ tenancy.UserID }}</span>
 
 				<span
 					class="
@@ -22,7 +23,16 @@
 				>
 			</div>
 
-			<div class="w-full text-sm"></div>
+			<div class="w-full text-sm">
+				LeaseStart: {{ dateStamp(tenancy.LeaseStart) }} | LeaseStop:
+				{{ dateStamp(tenancy.LeaseStop) }}
+				<span> | Vacating: {{ dateStamp(tenancy.Vacating) }}</span>
+			</div>
+			<div class="w-full text-sm">
+				RentArrears: {{ tenancy.RentArrears }} | ArrearsPaidTo:
+				{{ dateStamp(tenancy.ArrearsPaidTo) }} | PaidTo:
+				{{ dateStamp(tenancy.PaidTo) }}
+			</div>
 		</div>
 		<!-- related objects -->
 		<div class="w-full flex">
@@ -53,7 +63,7 @@ import ChevronDoubleRight from "../../Buttons/ChevronDoubleRight.vue";
 import ChevronDoubleLeft from "../../Buttons/ChevronDoubleLeft.vue";
 import ChevronDoubleDown from "../../Buttons/ChevronDoubleDown.vue";
 import ChevronDoubleUp from "../../Buttons/ChevronDoubleUp.vue";
-
+import { timeStamp, dateStamp } from "../../Helpers";
 export default {
 	props: {
 		tenancy: Object,
@@ -70,6 +80,8 @@ export default {
 		};
 	},
 	methods: {
+		timeStamp,
+		dateStamp,
 		expand() {
 			this.tenancy.expanded = true;
 		},

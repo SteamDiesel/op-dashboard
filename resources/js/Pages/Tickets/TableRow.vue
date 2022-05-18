@@ -44,10 +44,10 @@
 			</div>
 		</td>
 		<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-			{{ timestamp(ticket.created_at) }}
+			{{ timeStamp(ticket.created_at) }}
 		</td>
 		<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-			{{ timestamp(ticket.updated_at) }}
+			{{ timeStamp(ticket.updated_at) }}
 		</td>
 
 		<td
