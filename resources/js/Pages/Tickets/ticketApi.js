@@ -69,3 +69,49 @@ export function fetchProperty() {
             // $emit("failed", error);
         });
 }
+export function addTask() {
+    console.log("adding task");
+    console.log(this.$page.props.ticket);
+    let $task = {
+        title: "",
+        is_complete: false,
+    };
+    if (this.$page.props.ticket.tasks !== null) {
+        this.$page.props.ticket.tasks.push($task);
+    } else {
+        this.$page.props.ticket.tasks = [];
+        this.$page.props.ticket.tasks.push($task);
+    }
+
+    console.log(this.$page.props.ticket.tasks);
+}
+export function saveTask(task, index) {
+    if (task.title == "") {
+        console.log("Dropping empty task " + index);
+        this.$page.props.ticket.tasks.splice(index, 1);
+    }
+    this.saveTicket(this.$page.props.ticket);
+}
+
+export function addUser(u) {
+    console.log("addUser fired");
+
+    console.log(u);
+    if (this.$page.props.ticket.users == null) {
+        this.$page.props.ticket.users = [];
+    }
+    if (u !== null) {
+        this.$page.props.ticket.users.push(u);
+    }
+    this.saveTicket(this.$page.props.ticket);
+}
+export function dropUser(user) {
+    console.log(user);
+    let index = this.$page.props.ticket.users.findIndex((u) => {
+        return u.UserID == user.UserID;
+    });
+    console.log(index);
+
+    this.$page.props.ticket.users.splice(index, 1);
+    this.saveTicket(this.$page.props.ticket);
+}

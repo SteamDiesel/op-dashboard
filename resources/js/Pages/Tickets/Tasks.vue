@@ -7,7 +7,7 @@
 					class="block font-semibold text-gray-700"
 					>Tasks</label
 				>
-				<button class="h-5" @click.prevent="$emit('addTask')">
+				<button class="h-5" @click.prevent="addTask">
 					<PlusIcon class="h-5 text-gray-700" />
 				</button>
 			</div>
@@ -21,7 +21,7 @@
 					<input
 						:for="`task-${index}`"
 						v-model="task.title"
-						@change="$emit('saveTask', task, index)"
+						@change="saveTask(task, index)"
 						class="
 							pl-2
 							py-1
@@ -38,7 +38,7 @@
 						:name="`task-${index}`"
 						type="checkbox"
 						v-model="task.is_complete"
-						@change="$emit('saveTask', task, index)"
+						@change="saveTask(task, index)"
 						class="
 							focus:ring-indigo-500
 							h-4
@@ -55,6 +55,7 @@
 </template>
 
 <script>
+import { saveTicket, saveTask, addTask } from "./ticketApi.js";
 import { PlusIcon } from "@heroicons/vue/outline";
 export default {
 	components: {
@@ -62,6 +63,11 @@ export default {
 	},
 	props: {
 		tasks: Object,
+	},
+	methods: {
+		saveTicket,
+		saveTask,
+		addTask,
 	},
 };
 </script>

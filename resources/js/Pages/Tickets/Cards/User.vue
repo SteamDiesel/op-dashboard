@@ -9,8 +9,9 @@
 						text-green-600
 						rounded-full
 						uppercase
-						h-8
-						w-8
+						p-2
+						w-10
+						h-10
 						font-semibold
 						items-center
 						content-center

@@ -1,45 +1,35 @@
 <template>
-	<div>
-		<TicketLayout
-			:ticket="$attrs.ticket"
-			:title="'Ticket: ' + $attrs.ticket.title"
-			:navigation="navigation"
-		>
-			<!-- Named slots -->
-			<template v-slot:sidebar>
-				<Sidebar
-					:team="$attrs.team"
-					@save-ticket="saveTicket"
-					:ticket="$attrs.ticket"
-				></Sidebar>
-				<Tasks
-					@add-task="addTask"
-					@save-task="saveTask"
-					@save-ticket="saveTicket"
-					:tasks="$attrs.ticket.tasks"
-				></Tasks>
-			</template>
-			<template v-slot:header>
-				<PageTabs
-					:tabs="tabs"
-					:active="active_tab"
-					@change-tab="changeTab"
-				></PageTabs>
-			</template>
-			This is the content
-		</TicketLayout>
-	</div>
+	<TicketLayout :ticket="$attrs.ticket" :team="$attrs.team">
+		<div class="w-full h-full grid grid-cols-1 gap-4 divide-y">
+			<div>
+				<h2 class="font-semibold">Dive</h2>
+				<p class="text-sm">
+					Use this page to retrieve and explore related objects.
+				</p>
+			</div>
+			<ObjectCard v-if="$attrs.ticket.users" name="Users">
+				<DiveUser
+					v-for="(u, index) in $attrs.ticket.users"
+					:key="index"
+					:user="u"
+				></DiveUser>
+			</ObjectCard>
+			<ObjectCard v-if="$attrs.ticket.properties" name="Properties">
+				Properties
+			</ObjectCard>
+		</div>
+	</TicketLayout>
 </template>
 
 <script>
 import TicketLayout from "../../../Layouts/TicketLayout.vue";
-import PageTabs from "../../Components/PageTabs.vue";
-import Sidebar from "../Sidebar.vue";
+import ObjectCard from "../Dive/Object.vue";
+import DiveUser from "../Dive/User.vue";
 export default {
 	components: {
 		TicketLayout,
-		PageTabs,
-		Sidebar,
+		ObjectCard,
+		DiveUser,
 	},
 };
 </script>

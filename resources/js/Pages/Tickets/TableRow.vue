@@ -28,7 +28,7 @@
 					</div>
 
 					<div class="text-gray-500">
-						Created at {{ timestamp(ticket.created_at) }}
+						Created at {{ timeStamp(ticket.created_at) }}
 					</div>
 				</div>
 			</div>
@@ -81,7 +81,7 @@
 </template>
 
 <script>
-import dayjs from "dayjs";
+import { timeStamp } from "../Helpers";
 import { LoginIcon } from "@heroicons/vue/outline";
 export default {
 	setup() {
@@ -95,11 +95,7 @@ export default {
 	},
 	computed: {},
 	methods: {
-		timestamp(date) {
-			return dayjs(date, "YYYY-MM-DD hh:mm:ss").format(
-				"DD/MM/YYYY h:mm a"
-			);
-		},
+		timeStamp,
 	},
 };
 </script>

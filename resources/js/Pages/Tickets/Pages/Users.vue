@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<TicketLayout :ticket="$attrs.ticket" :team="$attrs.team">
 		<div class="flex gap-4">
 			<div class="max-w-xs">
 				<label class="sr-only text-sm font-medium text-gray-700"
@@ -113,29 +113,52 @@
 					</div>
 				</div>
 				<div class="sm:w-1/2 flex justify-center items-center">
-					<Secondary @click="$emit('addUser', u)">Select</Secondary>
+					<Secondary @click="addUser(u)">Select</Secondary>
 				</div>
 			</div>
 		</div>
 		<div class="w-full mt-8">
-			<slot></slot>
+			<div v-if="$attrs.ticket.users">
+				<User
+					class="mb-4"
+					v-for="(u, index) in $attrs.ticket.users"
+					:key="index"
+					:user="u"
+				>
+					<Secondary class="h-10" @click.prevent="dropUser(u)"
+						>Drop</Secondary
+					>
+				</User>
+			</div>
 		</div>
-	</div>
+	</TicketLayout>
 </template>
 
 <script>
 import axios from "axios";
 import Primary from "../../Buttons/Primary.vue";
 import Secondary from "../../Buttons/Secondary.vue";
+import BtnMinus from "../../Buttons/Minus.vue";
+import TicketLayout from "../../../Layouts/TicketLayout.vue";
+import Sidebar from "../Sidebar.vue";
+import Tasks from "../Tasks.vue";
+import User from "../Cards/User.vue";
+import TradieMenu from "../Cards/TradieMenu.vue";
+
+import { saveTicket, addUser, dropUser } from "../ticketApi.js";
 
 export default {
 	components: {
 		Primary,
 		Secondary,
+		BtnMinus,
+		TicketLayout,
+		Sidebar,
+		Tasks,
+		User,
+		TradieMenu,
 	},
-	props: {
-		ticket: Object,
-	},
+
 	data() {
 		return {
 			email: "",
@@ -145,6 +168,9 @@ export default {
 		};
 	},
 	methods: {
+		addUser,
+		dropUser,
+		saveTicket,
 		enterSearch(field) {
 			this.clearFields(field);
 			this.search();

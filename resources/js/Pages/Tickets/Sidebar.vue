@@ -120,7 +120,7 @@
 					name="title"
 					id="title"
 					v-model="ticket.title"
-					@change="$emit('saveTicket', ticket)"
+					@change="saveTicket"
 					class="
 						shadow-sm
 						focus:ring-indigo-500 focus:border-indigo-500
@@ -158,7 +158,7 @@
 					name="description"
 					id="description"
 					v-model="ticket.description"
-					@change="$emit('saveTicket', ticket)"
+					@change="saveTicket"
 					placeholder="description"
 					rows="2"
 				></textarea>

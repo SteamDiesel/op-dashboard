@@ -21,6 +21,8 @@ class Activity extends Model
         'details', //nullable
     ];
 
+    protected $with = ['user'];
+
     /**
      * Get the user associated with the Activity
      *

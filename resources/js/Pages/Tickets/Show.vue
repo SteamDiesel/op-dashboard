@@ -1,5 +1,4 @@
 <script setup>
-import PageTabs from "../Components/PageTabs.vue";
 import Users from "./Pages/Users.vue";
 import Jobs from "./Pages/Jobs.vue";
 import User from "./Cards/User.vue";
@@ -43,20 +42,7 @@ export default {
 				// 	icon: FolderIcon,
 				// },
 			],
-			tabs: [
-				{
-					name: "Users",
-					page: "users",
-				},
-				{
-					name: "Dive",
-					page: "dive",
-				},
-				{
-					name: "Data",
-					page: "data",
-				},
-			],
+
 			active_tab: "users",
 		};
 	},
@@ -122,9 +108,6 @@ export default {
 		changeTab(tab) {
 			this.active_tab = tab;
 		},
-		actionMergeTradie(tradie) {
-			this.active_tab = "merge_tradie";
-		},
 	},
 };
 </script>
@@ -148,13 +131,6 @@ export default {
 				@save-ticket="saveTicket"
 				:tasks="$attrs.ticket.tasks"
 			></Tasks>
-		</template>
-		<template v-slot:header>
-			<PageTabs
-				:tabs="tabs"
-				:active="active_tab"
-				@change-tab="changeTab"
-			></PageTabs>
 		</template>
 
 		<!--  -->
@@ -221,10 +197,5 @@ export default {
 				<ObjectNest :val="$attrs.ticket"></ObjectNest>
 			</div>
 		</div>
-		<!-- Merge User -->
-		<MergeTradie
-			v-if="active_tab == 'merge_tradie'"
-			:ticket="$attrs.ticket"
-		></MergeTradie>
 	</TicketLayout>
 </template>

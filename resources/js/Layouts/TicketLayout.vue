@@ -73,20 +73,13 @@
 							</div>
 						</TransitionChild>
 						<div class="flex-1 h-0 pt-5 pb-4 overflow-y-auto">
-							<div class="flex-shrink-0 flex items-center px-4">
-								<img
-									class="h-8 w-auto"
-									src="https://tailwindui.com/img/logos/workflow-logo-indigo-600-mark-gray-800-text.svg"
-									alt="Workflow"
-								/>
-							</div>
 							<nav class="mt-5 px-2 space-y-1">
 								<Link
 									v-for="item in navigation"
 									:key="item.name"
 									:href="item.href"
 									:class="[
-										$page.url.startsWith(item.prefix)
+										$page.url.startsWith(item.href)
 											? 'bg-gray-100 text-gray-900'
 											: 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
 										'group flex items-center px-2 py-2 text-base font-medium rounded-md',
@@ -95,7 +88,7 @@
 									<component
 										:is="item.icon"
 										:class="[
-											$page.url.startsWith(item.prefix)
+											$page.url.startsWith(item.href)
 												? 'text-gray-500'
 												: 'text-gray-400 group-hover:text-gray-500',
 											'mr-4 flex-shrink-0 h-6 w-6',
@@ -173,7 +166,7 @@
 			>
 				<div class="flex-1 flex flex-col pb-4 overflow-y-auto">
 					<Link
-						href="/"
+						href="/tickets"
 						class="
 							flex
 							items-center
@@ -189,33 +182,10 @@
 						<div class="ml-2 font-bold">Tickets</div>
 					</Link>
 					<div>
+						<Sidebar :team="team" :ticket="ticket"></Sidebar>
+						<Tasks :tasks="ticket.tasks"></Tasks>
 						<slot name="sidebar"></slot>
 					</div>
-					<nav class="mt-5 flex-1 px-2 bg-white space-y-1">
-						<Link
-							v-for="item in navigation"
-							:key="item.name"
-							:href="item.href"
-							:class="[
-								$page.url.startsWith(item.prefix)
-									? 'bg-gray-100 text-gray-900'
-									: 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
-								'group flex items-center px-2 py-2 text-sm font-medium rounded-md',
-							]"
-						>
-							<component
-								:is="item.icon"
-								:class="[
-									$page.url.startsWith(item.prefix)
-										? 'text-gray-500'
-										: 'text-gray-400 group-hover:text-gray-500',
-									'mr-3 flex-shrink-0 h-6 w-6',
-								]"
-								aria-hidden="true"
-							/>
-							{{ item.name }}
-						</Link>
-					</nav>
 				</div>
 				<!-- <div
 						class="flex-shrink-0 flex border-t border-gray-200 p-4"
@@ -311,7 +281,62 @@
 							md:px-8
 						"
 					>
-						<slot name="header"></slot>
+						<div class="w-full">
+							<div class="sm:hidden">
+								<label for="tabs" class="sr-only"
+									>Select a tab</label
+								>
+								<!-- Use an "onChange" listener to redirect the user to the selected tab URL. -->
+								<select
+									id="tabs"
+									name="tabs"
+									class="
+										block
+										w-full
+										pl-3
+										pr-10
+										py-2
+										text-base
+										border-gray-300
+										focus:outline-none
+										focus:ring-indigo-500
+										focus:border-indigo-500
+										sm:text-sm
+										rounded-md
+									"
+								>
+									<option
+										v-for="tab in tabs"
+										:key="tab.name"
+										:selected="tab.current"
+									>
+										{{ tab.name }}
+									</option>
+								</select>
+							</div>
+							<div class="hidden sm:block">
+								<div class="border-b border-gray-200">
+									<nav
+										class="-mb-px flex space-x-8"
+										aria-label="Tabs"
+									>
+										<Link
+											v-for="tab in tabs"
+											:key="tab.name"
+											:href="tab.href"
+											:class="[
+												$page.url.startsWith(tab.href)
+													? 'border-indigo-500 text-indigo-600'
+													: 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
+												'whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm',
+											]"
+										>
+											{{ tab.name }}
+										</Link>
+									</nav>
+								</div>
+							</div>
+						</div>
 					</div>
 					<div class="w-full mx-auto px-4 sm:px-6 md:px-8">
 						<!-- Replace with your content -->
@@ -328,7 +353,23 @@
 
 <script>
 import { ref } from "vue";
+const navigation = [
+	{
+		name: "Tickets",
+		href: "/tickets",
+		prefix: "/ticket",
+		icon: HomeIcon,
+	},
 
+	{ name: "Users", href: "/users", prefix: "/user", icon: UsersIcon },
+	{ name: "Jobs", href: "/jobs", prefix: "/job", icon: FolderIcon },
+	{
+		name: "Test Connection",
+		href: "/test_connection",
+		icon: ChartBarIcon,
+		current: false,
+	},
+];
 import { Head, Link } from "@inertiajs/inertia-vue3";
 import {
 	Dialog,
@@ -336,14 +377,19 @@ import {
 	TransitionChild,
 	TransitionRoot,
 } from "@headlessui/vue";
-import { MenuIcon, XIcon, LogoutIcon } from "@heroicons/vue/outline";
+import {
+	MenuIcon,
+	XIcon,
+	LogoutIcon,
+	HomeIcon,
+	UsersIcon,
+	FolderIcon,
+	ChartBarIcon,
+} from "@heroicons/vue/outline";
+import Tasks from "../Pages/Tickets/Tasks.vue";
+import Sidebar from "../Pages/Tickets/Sidebar.vue";
 
 export default {
-	props: {
-		title: String,
-		ticket: Object,
-		navigation: Object,
-	},
 	components: {
 		Dialog,
 		DialogOverlay,
@@ -354,12 +400,46 @@ export default {
 		Link,
 		Head,
 		LogoutIcon,
+		Tasks,
+		Sidebar,
+		HomeIcon,
+		UsersIcon,
+		FolderIcon,
+		ChartBarIcon,
 	},
+	props: {
+		team: Object,
+		ticket: Object,
+	},
+	data() {
+		return {
+			tabs: [
+				{
+					name: "Users",
+					href: "/ticket/" + this.ticket.id + "/users",
+				},
+				{
+					name: "Dive",
+					href: "/ticket/" + this.ticket.id + "/dive",
+				},
+				{
+					name: "Data",
+					href: "/ticket/" + this.ticket.id + "/data",
+				},
+				{
+					name: "Activity",
+					href: "/ticket/" + this.ticket.id + "/activity",
+				},
+			],
+		};
+	},
+
 	setup() {
 		const sidebarOpen = ref(false);
 
 		return {
 			sidebarOpen,
+			navigation,
 		};
 	},
 };

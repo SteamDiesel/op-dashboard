@@ -87,7 +87,7 @@ class TicketController extends Controller
         $a->user()->associate($user);
         $a->team()->associate($user->currentTeam);
         $a->ticket()->associate($ticket);
-        $a->type = "Create";
+        $a->type = "create";
         $a->endpoint = "NA";
         $a->parameters = "NA";
         $a->result = "Success";
@@ -128,7 +128,7 @@ class TicketController extends Controller
         $ticket->user;
         $team = Auth::User()->currentTeam->makeHidden(['client_secret', 'client_id', 'access_token', 'token_type', 'refresh_token']);
         $team->allUsers();
-        return Inertia::render('Tickets/Show', [
+        return Inertia::render('Tickets/Pages/Users', [
             'ticket' => $ticket,
             'team' => $team
         ]);
@@ -140,33 +140,50 @@ class TicketController extends Controller
      * @param  \App\Models\Ticket  $ticket
      * @return \Illuminate\Http\Response
      */
-    public function activity(Ticket $ticket)
+    public function page(Ticket $ticket, $page)
     {
-        $activity = $ticket->activity;
-        return Inertia::render('Tickets/Pages/Activity', [
-            "activity" => $activity
-        ]);
+        $ticket->pms = json_decode($ticket->pms);
+        $ticket->users = json_decode($ticket->users);
+        $ticket->properties = json_decode($ticket->properties);
+        $ticket->agencies = json_decode($ticket->agencies);
+        $ticket->tenants = json_decode($ticket->tenants);
+        $ticket->owners = json_decode($ticket->owners);
+        $ticket->tradies = json_decode($ticket->tradies);
+        $ticket->snapshot = json_decode($ticket->snapshot);
+        $ticket->tasks = json_decode($ticket->tasks);
+        $ticket->user;
+        $team = Auth::User()->currentTeam->makeHidden(['client_secret', 'client_id', 'access_token', 'token_type', 'refresh_token']);
+        $team->allUsers();
+
+        if ($page == 'dive') {
+            return Inertia::render('Tickets/Pages/Dive', [
+                'ticket' => $ticket,
+                'team' => $team
+            ]);
+        }
+        if ($page == 'activity') {
+            $activity = Activity::where('ticket_id', $ticket->id)->get();
+            return Inertia::render('Tickets/Pages/Activity', [
+                "activity" => $activity,
+                'ticket' => $ticket,
+                'team' => $team
+            ]);
+        }
+        if ($page == 'data') {
+            return Inertia::render('Tickets/Pages/Data', [
+                'ticket' => $ticket,
+                'team' => $team
+            ]);
+        }
+        if ($page == 'users') {
+            return Inertia::render('Tickets/Pages/Users', [
+                'ticket' => $ticket,
+                'team' => $team
+            ]);
+        }
     }
-    /**
-     * Show the page for activity of the specified resource.
-     *
-     * @param  \App\Models\Ticket  $ticket
-     * @return \Illuminate\Http\Response
-     */
-    public function users(Ticket $ticket)
-    {
-        return Inertia::render('Tickets/Pages/Users');
-    }
-    /**
-     * Show the page for activity of the specified resource.
-     *
-     * @param  \App\Models\Ticket  $ticket
-     * @return \Illuminate\Http\Response
-     */
-    public function dive(Ticket $ticket)
-    {
-        return Inertia::render('Tickets/Pages/Dive');
-    }
+
+
     /**
      * Show the form for editing the specified resource.
      *
