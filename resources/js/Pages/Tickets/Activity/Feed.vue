@@ -82,7 +82,7 @@
 							</div>
 						</template>
 						<!-- Comment -->
-						<template v-if="activityItem.type === 'comment'">
+						<template v-else-if="activityItem.type === 'comment'">
 							<div class="relative">
 								<img
 									class="
@@ -144,10 +144,98 @@
 								</div>
 							</div>
 						</template>
+						<!-- Close -->
+						<template v-else-if="activityItem.type === 'close'">
+							<div>
+								<div class="relative px-1">
+									<div
+										class="
+											h-8
+											w-8
+											bg-gray-100
+											rounded-full
+											ring-8 ring-white
+											flex
+											items-center
+											justify-center
+										"
+									>
+										<CheckIcon
+											class="h-5 w-5 text-gray-500"
+											aria-hidden="true"
+										/>
+									</div>
+								</div>
+							</div>
+							<div class="min-w-0 flex-1 py-1.5">
+								<div class="text-sm text-gray-500">
+									<p
+										class="mt-0.5 text-sm text-gray-500"
+										:title="
+											activityItem.details +
+											' ' +
+											timeStamp(activityItem.created_at)
+										"
+									>
+										{{ activityItem.user.name }}
+										{{ activityItem.details }}
+
+										{{
+											timeForHumans(
+												activityItem.created_at
+											)
+										}}
+									</p>
+								</div>
+							</div>
+						</template>
+						<!-- Open -->
+						<template v-else-if="activityItem.type === 'open'">
+							<div>
+								<div class="relative px-1">
+									<div
+										class="
+											h-8
+											w-8
+											bg-gray-100
+											rounded-full
+											ring-8 ring-white
+											flex
+											items-center
+											justify-center
+										"
+									>
+										<InboxInIcon
+											class="h-5 w-5 text-gray-500"
+											aria-hidden="true"
+										/>
+									</div>
+								</div>
+							</div>
+							<div class="min-w-0 flex-1 py-1.5">
+								<div class="text-sm text-gray-500">
+									<p
+										class="mt-0.5 text-sm text-gray-500"
+										:title="
+											activityItem.details +
+											' ' +
+											timeStamp(activityItem.created_at)
+										"
+									>
+										{{ activityItem.user.name }}
+										{{ activityItem.details }}
+
+										{{
+											timeForHumans(
+												activityItem.created_at
+											)
+										}}
+									</p>
+								</div>
+							</div>
+						</template>
 						<!-- Assignment -->
-						<template
-							v-else-if="activityItem.type === 'assignment'"
-						>
+						<template v-else-if="activityItem.type === 'reassign'">
 							<div>
 								<div class="relative px-1">
 									<div
@@ -171,19 +259,23 @@
 							</div>
 							<div class="min-w-0 flex-1 py-1.5">
 								<div class="text-sm text-gray-500">
-									<a class="font-medium text-gray-900">{{
-										activityItem.user.name
-									}}</a>
-									{{ " " }}
-									assigned
-									{{ " " }}
-									<a class="font-medium text-gray-900">{{
-										activityItem.assigned.name
-									}}</a>
-									{{ " " }}
-									<span class="whitespace-nowrap">{{
-										activityItem.created_at
-									}}</span>
+									<p
+										class="mt-0.5 text-sm text-gray-500"
+										:title="
+											activityItem.details +
+											' ' +
+											timeStamp(activityItem.created_at)
+										"
+									>
+										{{ activityItem.user.name }}
+										{{ activityItem.details }}
+
+										{{
+											timeForHumans(
+												activityItem.created_at
+											)
+										}}
+									</p>
 								</div>
 							</div>
 						</template>
@@ -199,6 +291,8 @@ import {
 	TagIcon,
 	UserCircleIcon,
 	SparklesIcon,
+	CheckIcon,
+	InboxInIcon,
 } from "@heroicons/vue/solid";
 </script>
 

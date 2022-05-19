@@ -13,6 +13,40 @@ export function saveTicket() {
             console.log(error);
         });
 }
+export function reassignTicket(id) {
+    let ticket = this.$page.props.ticket;
+
+    axios
+        .post("/ticket/reassign/" + ticket.id, {
+            new_user_id: id,
+        })
+        .then((response) => {
+            console.log(response.data.message);
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+}
+export function closeTicket(id) {
+    axios
+        .post("/ticket/close/" + id)
+        .then((response) => {
+            console.log(response.data.message);
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+}
+export function openTicket(id) {
+    axios
+        .post("/ticket/open/" + id)
+        .then((response) => {
+            console.log(response.data.message);
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+}
 export function fetchUserTenancy() {
     axios
         .post("/ticket/api/getUserTenancies", {

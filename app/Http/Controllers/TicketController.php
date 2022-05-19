@@ -6,6 +6,8 @@ use App\Http\Requests\StoreTicketRequest;
 use App\Http\Requests\UpdateTicketRequest;
 use App\Models\Activity;
 use App\Models\Ticket;
+use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
@@ -162,7 +164,8 @@ class TicketController extends Controller
             ]);
         }
         if ($page == 'activity') {
-            $activity = Activity::where('ticket_id', $ticket->id)->get();
+            $activity = Activity::where('ticket_id', $ticket->id)->latest()
+                ->get();
             return Inertia::render('Tickets/Pages/Activity', [
                 "activity" => $activity,
                 'ticket' => $ticket,
@@ -230,6 +233,120 @@ class TicketController extends Controller
             return response()->json([
                 'message' => 'Failed to Update Ticket.',
             ]);
+        }
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Models\Ticket  $ticket
+     * @return \Illuminate\Http\Response
+     */
+    public function reassign(Ticket $ticket, Request $request)
+    {
+        //
+
+
+        $newuser = User::findOrFail($request->new_user_id);
+
+        $ticket->user()->associate($newuser);
+
+
+        if ($ticket->save()) {
+            $user = Auth::user();
+            $a = new Activity;
+            $a->user()->associate($user);
+            $a->team()->associate($user->currentTeam);
+            $a->ticket()->associate($ticket);
+            $a->type = "reassign";
+            $a->endpoint = "NA";
+            $a->parameters = "NA";
+            $a->result = "Success";
+            $a->details = "changed ticket owner to " . $newuser->name;
+            $a->save();
+            return response()->json([
+                'message' => 'Ticket reassigned',
+                'Ticket' => $ticket,
+                'request' => $request
+            ]);
+        } else {
+            return response()->json([
+                'message' => 'Failed to Update Ticket.',
+            ]);
+        }
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Models\Ticket  $ticket
+     * @return \Illuminate\Http\Response
+     */
+    public function open(Ticket $ticket)
+    {
+        //
+        $user = Auth::user();
+        if ($ticket->team_id === $user->currentTeam->id) {
+            $ticket->is_open = true;
+            if ($ticket->save()) {
+
+                $a = new Activity;
+                $a->user()->associate($user);
+                $a->team()->associate($user->currentTeam);
+                $a->ticket()->associate($ticket);
+                $a->type = "open";
+                $a->endpoint = "NA";
+                $a->parameters = "NA";
+                $a->result = "Success";
+                $a->details = "opened this ticket";
+                $a->save();
+                return response()->json([
+                    'message' => 'Ticket opened',
+                ]);
+            } else {
+                return response()->json([
+                    'message' => 'System has failed to open this ticket.',
+                ]);
+            }
+        } else {
+            return "You're not on the same team!";
+        }
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Models\Ticket  $ticket
+     * @return \Illuminate\Http\Response
+     */
+    public function close(Ticket $ticket)
+    {
+        //
+        $user = Auth::user();
+        if ($ticket->team_id === $user->currentTeam->id) {
+            $ticket->is_open = false;
+            if ($ticket->save()) {
+
+                $a = new Activity;
+                $a->user()->associate($user);
+                $a->team()->associate($user->currentTeam);
+                $a->ticket()->associate($ticket);
+                $a->type = "close";
+                $a->endpoint = "NA";
+                $a->parameters = "NA";
+                $a->result = "Success";
+                $a->details = "closed this ticket";
+                $a->save();
+                return response()->json([
+                    'message' => 'Ticket closed',
+                ]);
+            } else {
+                return response()->json([
+                    'message' => 'System has failed to close this ticket.',
+                ]);
+            }
+        } else {
+            return "You're not on the same team!";
         }
     }
 

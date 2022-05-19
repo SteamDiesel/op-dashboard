@@ -65,6 +65,9 @@ Route::middleware([
 
     Route::get('/tickets/new', [TicketController::class, 'create']);
     Route::post('/ticket/update/{ticket}', [TicketController::class, 'update']);
+    Route::post('/ticket/reassign/{ticket}', [TicketController::class, 'reassign']);
+    Route::post('/ticket/open/{ticket}', [TicketController::class, 'open']);
+    Route::post('/ticket/close/{ticket}', [TicketController::class, 'close']);
 
     // Ticket API Post Calls
     Route::post('/ticket/api/getUser', [OurPropertyUser::class, 'fetch']);

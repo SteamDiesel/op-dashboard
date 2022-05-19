@@ -41,7 +41,7 @@
 						title="Close the ticket"
 						class="border rounded-md hover:border-indigo-700"
 						v-if="ticket.is_open"
-						@click="toggleClosed(false)"
+						@click="toggleClosed()"
 					>
 						<CheckIcon
 							class="h-7 hover:text-indigo-700 text-gray-400"
@@ -51,7 +51,7 @@
 						class="border rounded-md hover:border-indigo-700"
 						title="Re-open the ticket"
 						v-if="!ticket.is_open"
-						@click="toggleClosed(true)"
+						@click="toggleOpen()"
 					>
 						<InboxInIcon
 							class="h-7 hover:text-indigo-700 text-gray-400"
@@ -173,7 +173,12 @@ import {
 	InboxInIcon,
 	CheckIcon,
 } from "@heroicons/vue/outline";
-import { saveTicket } from "./ticketApi.js";
+import {
+	saveTicket,
+	reassignTicket,
+	closeTicket,
+	openTicket,
+} from "./ticketApi.js";
 
 export default {
 	props: {
@@ -183,6 +188,7 @@ export default {
 	data() {
 		return {
 			showUsers: false,
+			toggle_loading: false,
 		};
 	},
 	components: {
@@ -192,15 +198,23 @@ export default {
 	},
 	methods: {
 		saveTicket,
-		toggleClosed(io) {
-			this.ticket.is_open = io;
-			this.saveTicket();
+		reassignTicket,
+		closeTicket,
+		openTicket,
+
+		toggleClosed() {
+			this.ticket.is_open = false;
+			this.closeTicket(this.ticket.id);
+		},
+		toggleOpen() {
+			this.ticket.is_open = true;
+			this.openTicket(this.ticket.id);
 		},
 		changeUser(u) {
 			this.ticket.user = u;
 			this.ticket.user_id = u.id;
 			this.showUsers = false;
-			this.saveTicket();
+			this.reassignTicket(u.id);
 		},
 	},
 };
