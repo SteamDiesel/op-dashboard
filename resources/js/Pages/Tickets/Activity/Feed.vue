@@ -81,6 +81,66 @@
 								</div>
 							</div>
 						</template>
+						<!-- API READ -->
+						<template v-else-if="activityItem.type === 'api_read'">
+							<div class="relative">
+								<img
+									class="
+										h-10
+										w-10
+										rounded-full
+										bg-gray-400
+										flex
+										items-center
+										justify-center
+										ring-8 ring-white
+									"
+									:src="activityItem.user.profile_photo_url"
+									alt=""
+								/>
+
+								<span
+									class="
+										absolute
+										-bottom-0.5
+										-right-1
+										bg-white
+										rounded-tl
+										px-0.5
+										py-px
+									"
+								>
+									<SearchIcon
+										class="h-5 w-5 text-orange-400"
+										aria-hidden="true"
+									/>
+								</span>
+							</div>
+							<div class="min-w-0 flex-1">
+								<div>
+									<div class="text-sm">
+										<a class="font-medium text-gray-900">{{
+											activityItem.user.name
+										}}</a>
+									</div>
+									<p
+										class="mt-0.5 text-sm text-gray-500"
+										:title="
+											timeStamp(activityItem.created_at)
+										"
+									>
+										{{ activityItem.details }}
+										{{ activityItem.parameters }}
+										<br />
+										{{
+											timeForHumans(
+												activityItem.created_at
+											)
+										}}
+									</p>
+								</div>
+							</div>
+						</template>
 						<!-- Comment -->
 						<template v-else-if="activityItem.type === 'comment'">
 							<div class="relative">
@@ -129,7 +189,7 @@
 											timeStamp(activityItem.created_at)
 										"
 									>
-										Commented
+										commented
 										{{
 											timeForHumans(
 												activityItem.created_at
@@ -179,7 +239,7 @@
 									>
 										{{ activityItem.user.name }}
 										{{ activityItem.details }}
-
+										<br />
 										{{
 											timeForHumans(
 												activityItem.created_at
@@ -224,7 +284,7 @@
 									>
 										{{ activityItem.user.name }}
 										{{ activityItem.details }}
-
+										<br />
 										{{
 											timeForHumans(
 												activityItem.created_at
@@ -242,7 +302,7 @@
 										class="
 											h-8
 											w-8
-											bg-gray-100
+											bg-green-100
 											rounded-full
 											ring-8 ring-white
 											flex
@@ -251,6 +311,106 @@
 										"
 									>
 										<UserCircleIcon
+											class="h-5 w-5 text-green-500"
+											aria-hidden="true"
+										/>
+									</div>
+								</div>
+							</div>
+							<div class="min-w-0 flex-1 py-1.5">
+								<div class="text-sm text-gray-500">
+									<p
+										class="mt-0.5 text-sm text-gray-500"
+										:title="
+											activityItem.details +
+											' ' +
+											timeStamp(activityItem.created_at)
+										"
+									>
+										{{ activityItem.user.name }}
+										{{ activityItem.details }}
+										<br />
+										{{
+											timeForHumans(
+												activityItem.created_at
+											)
+										}}
+									</p>
+								</div>
+							</div>
+						</template>
+						<!-- Ticket description -->
+						<template
+							v-else-if="
+								activityItem.type === 'ticket_description'
+							"
+						>
+							<div>
+								<div class="relative px-1">
+									<div
+										class="
+											h-8
+											w-8
+											bg-gray-100
+											rounded-full
+											ring-8 ring-white
+											flex
+											items-center
+											justify-center
+										"
+									>
+										<PencilAltIcon
+											class="h-5 w-5 text-gray-500"
+											aria-hidden="true"
+										/>
+									</div>
+								</div>
+							</div>
+							<div class="min-w-0 flex-1 py-1.5">
+								<div class="text-sm text-gray-500">
+									<p
+										class="mt-0.5 text-sm text-gray-500"
+										:title="
+											timeStamp(activityItem.created_at)
+										"
+									>
+										{{ activityItem.user.name }}
+
+										changed the ticket description to:
+										<br />
+										<span class="italic">
+											{{ activityItem.details }}
+										</span>
+
+										<br />
+										{{
+											timeForHumans(
+												activityItem.created_at
+											)
+										}}
+									</p>
+								</div>
+							</div>
+						</template>
+						<!-- Ticket Edits -->
+						<template
+							v-else-if="activityItem.type === 'ticket_detail'"
+						>
+							<div>
+								<div class="relative px-1">
+									<div
+										class="
+											h-8
+											w-8
+											bg-gray-100
+											rounded-full
+											ring-8 ring-white
+											flex
+											items-center
+											justify-center
+										"
+									>
+										<PencilAltIcon
 											class="h-5 w-5 text-gray-500"
 											aria-hidden="true"
 										/>
@@ -269,7 +429,52 @@
 									>
 										{{ activityItem.user.name }}
 										{{ activityItem.details }}
-
+										<br />
+										{{
+											timeForHumans(
+												activityItem.created_at
+											)
+										}}
+									</p>
+								</div>
+							</div>
+						</template>
+						<!-- Tasks -->
+						<template v-else-if="activityItem.type === 'task'">
+							<div>
+								<div class="relative px-1">
+									<div
+										class="
+											h-8
+											w-8
+											bg-indigo-100
+											rounded-full
+											ring-8 ring-white
+											flex
+											items-center
+											justify-center
+										"
+									>
+										<ClipboardListIcon
+											class="h-5 w-5 text-indigo-500"
+											aria-hidden="true"
+										/>
+									</div>
+								</div>
+							</div>
+							<div class="min-w-0 flex-1 py-1.5">
+								<div class="text-sm text-gray-500">
+									<p
+										class="mt-0.5 text-sm text-gray-500"
+										:title="
+											activityItem.details +
+											' ' +
+											timeStamp(activityItem.created_at)
+										"
+									>
+										{{ activityItem.user.name }}
+										{{ activityItem.details }}
+										<br />
 										{{
 											timeForHumans(
 												activityItem.created_at
@@ -293,6 +498,9 @@ import {
 	SparklesIcon,
 	CheckIcon,
 	InboxInIcon,
+	ClipboardListIcon,
+	PencilAltIcon,
+	SearchIcon,
 } from "@heroicons/vue/solid";
 </script>
 

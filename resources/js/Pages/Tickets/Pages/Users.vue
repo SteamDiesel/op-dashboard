@@ -198,10 +198,9 @@ export default {
 					email: this.email,
 					phone: this.phone,
 					user_id: this.user_id,
+					ticket_id: this.$page.props.ticket.id,
 				})
 				.then((response) => {
-					console.log(response.data);
-					console.log(response.data.users);
 					let $users = response.data.users;
 					if ($users.length > 1) {
 						this.people = response.data.users;

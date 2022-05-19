@@ -351,11 +351,9 @@ import {
 	TransitionRoot,
 } from "@headlessui/vue";
 import {
-	CalendarIcon,
-	ChartBarIcon,
-	FolderIcon,
+	ReceiptTaxIcon,
 	HomeIcon,
-	InboxIcon,
+	ClipboardCheckIcon,
 	MenuIcon,
 	UsersIcon,
 	XIcon,
@@ -366,17 +364,23 @@ const navigation = [
 		name: "Tickets",
 		href: "/tickets",
 		prefix: "/ticket",
-		icon: HomeIcon,
+		icon: ClipboardCheckIcon,
 	},
 
 	{ name: "Users", href: "/users", prefix: "/user", icon: UsersIcon },
-	{ name: "Jobs", href: "/jobs", prefix: "/job", icon: FolderIcon },
-	{
-		name: "Test Connection",
-		href: "/test_connection",
-		icon: ChartBarIcon,
-		current: false,
-	},
+	// {
+	// 	name: "Properties",
+	// 	href: "/properties",
+	// 	prefix: "/propert",
+	// 	icon: HomeIcon,
+	// },
+	{ name: "Jobs", href: "/jobs", prefix: "/job", icon: ReceiptTaxIcon },
+	// {
+	// 	name: "Test Connection",
+	// 	href: "/test_connection",
+	// 	icon: ChartBarIcon,
+	// 	current: false,
+	// },
 ];
 
 export default {

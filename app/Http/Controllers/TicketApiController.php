@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Activity;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
@@ -251,6 +252,74 @@ class TicketApiController extends Controller
                 "success" => false,
                 'message' => "The request failed at the API Endpoint.",
                 'jobs' => []
+            ]);
+        }
+    }
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function getUser(Request $request)
+    {
+        //
+        $user = Auth::user();
+        $token = $user->currentTeam->access_token;
+        $endpoint = env('API_URL') . '/api/GetUserInfo';
+        $a = new Activity;
+        $a->user()->associate($user);
+        $a->team()->associate($user->currentTeam);
+        $a->ticket()->associate($request->ticket_id);
+
+        $a->type = "api_read";
+        $a->endpoint = $endpoint;
+
+        // first get the user
+        if ($request->email) {
+            $a->parameters = $request->email;
+            $a->details = "searched for user by Email";
+            $response = Http::withToken($token)->acceptJson()
+                ->get($endpoint, [
+                    'Email' => $request->email
+                ]);
+        }
+        if ($request->phone) {
+            $a->details = "searched for user by Mobile";
+            $a->parameters = $request->phone;
+            $response = Http::withToken($token)->acceptJson()
+                ->get($endpoint, [
+                    'Mobile' => $request->phone,
+                ]);
+        }
+        if ($request->user_id) {
+            $a->details = "searched for user by UserID";
+            $a->parameters = $request->user_id;
+            $response = Http::withToken($token)->acceptJson()
+                ->get($endpoint, [
+                    'UserID' => $request->user_id
+                ]);
+        }
+
+        $users = array();
+        if (is_array($response->object()->data)) {
+            $users = $response->object()->data;
+        } else {
+            array_push($users, $response->object()->data);
+        }
+
+        if ($response->successful()) {
+            $a->result = "Success";
+            $a->save();
+            return response()->json([
+                'users' => $users,
+                'message' => "request was successful, all users are attached as an array."
+            ]);
+        } else {
+            $a->result = "Failed";
+            $a->save();
+            return response()->json([
+                'message' => "The request failed. Maybe this app is not authenticated?"
             ]);
         }
     }

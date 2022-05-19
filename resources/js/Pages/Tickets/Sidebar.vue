@@ -120,7 +120,7 @@
 					name="title"
 					id="title"
 					v-model="ticket.title"
-					@change="saveTicket"
+					@change="updateTitle(ticket.title)"
 					class="
 						shadow-sm
 						focus:ring-indigo-500 focus:border-indigo-500
@@ -154,13 +154,15 @@
 						border-gray-300
 						rounded-md
 						align-top
+						pl-2
+						p-0
 					"
 					name="description"
 					id="description"
 					v-model="ticket.description"
-					@change="saveTicket"
+					@change="updateDescription(ticket.description)"
 					placeholder="description"
-					rows="2"
+					rows="5"
 				></textarea>
 			</div>
 		</div>
@@ -178,6 +180,7 @@ import {
 	reassignTicket,
 	closeTicket,
 	openTicket,
+	ticketActivity,
 } from "./ticketApi.js";
 
 export default {
@@ -201,7 +204,32 @@ export default {
 		reassignTicket,
 		closeTicket,
 		openTicket,
+		ticketActivity,
 
+		updateTitle(title) {
+			var activity = {
+				ticket_id: this.$page.props.ticket.id,
+				type: "ticket_detail",
+				endpoint: "NA",
+				parameters: "NA",
+				result: "Success",
+				details: "changed the ticket title to '" + title + "'",
+			};
+			ticketActivity(activity);
+			this.saveTicket();
+		},
+		updateDescription(d) {
+			var activity = {
+				ticket_id: this.$page.props.ticket.id,
+				type: "ticket_description",
+				endpoint: "NA",
+				parameters: "NA",
+				result: "Success",
+				details: d,
+			};
+			ticketActivity(activity);
+			this.saveTicket();
+		},
 		toggleClosed() {
 			this.ticket.is_open = false;
 			this.closeTicket(this.ticket.id);

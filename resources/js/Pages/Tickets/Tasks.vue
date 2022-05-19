@@ -38,7 +38,7 @@
 						:name="`task-${index}`"
 						type="checkbox"
 						v-model="task.is_complete"
-						@change="saveTask(task, index)"
+						@change="toggleComplete(task, index)"
 						class="
 							focus:ring-indigo-500
 							h-4
@@ -55,7 +55,7 @@
 </template>
 
 <script>
-import { saveTicket, saveTask, addTask } from "./ticketApi.js";
+import { saveTicket, addTask, ticketActivity } from "./ticketApi.js";
 import { PlusIcon } from "@heroicons/vue/outline";
 export default {
 	components: {
@@ -66,8 +66,43 @@ export default {
 	},
 	methods: {
 		saveTicket,
-		saveTask,
+		ticketActivity,
 		addTask,
+		toggleComplete(task) {
+			var activity = {
+				ticket_id: this.$page.props.ticket.id,
+				type: "task",
+				endpoint: "NA",
+				parameters: "NA",
+				result: "Success",
+			};
+			if (task.is_complete === true) {
+				activity.details =
+					"marked task '" + task.title + "' as complete.";
+			} else {
+				activity.details = "marked task '" + task.title + "' as to do.";
+			}
+			ticketActivity(activity);
+			this.saveTicket(this.$page.props.ticket);
+			// this.saveTask(task, index);
+		},
+		saveTask(task, index) {
+			var activity = {
+				ticket_id: this.$page.props.ticket.id,
+				type: "task",
+				endpoint: "NA",
+				parameters: "NA",
+				result: "Success",
+				details: "saved task as '" + task.title + "'",
+			};
+			if (task.title == "") {
+				activity.details = "deleted a task.";
+				console.log("Dropping empty task " + index);
+				this.$page.props.ticket.tasks.splice(index, 1);
+			}
+			ticketActivity(activity);
+			this.saveTicket(this.$page.props.ticket);
+		},
 	},
 };
 </script>

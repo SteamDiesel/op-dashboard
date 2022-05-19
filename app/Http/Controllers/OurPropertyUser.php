@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Activity;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
@@ -141,6 +142,42 @@ class OurPropertyUser extends Controller
             $users = $response->object()->data;
         } else {
             array_push($users, $response->object()->data);
+        }
+
+        if ($response->successful()) {
+            return response()->json([
+                'users' => $users,
+                'message' => "request was successful, all users are attached as an array."
+            ]);
+        } else {
+            return response()->json([
+                'message' => "The request failed. Maybe this app is not authenticated?"
+            ]);
+        }
+    }
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function autologin(Request $request)
+    {
+        //
+        return response()->json([
+            'url' => "https://propertymanager.our.property/?autologin=7e9aa9c1ee8dd1b404a8b762a1a85d5d",
+            'message' => "request was successful, autologin link attached."
+        ]);
+        $token = Auth::user()->currentTeam->access_token;
+        $endpoint = env('API_URL') . '/api/GetUserInfo';
+
+        // first get the user
+        if ($request->email) {
+
+            $response = Http::withToken($token)->acceptJson()
+                ->get($endpoint, [
+                    'Email' => $request->email
+                ]);
         }
 
         if ($response->successful()) {

@@ -21,3 +21,18 @@ export function dateStamp(date) {
 export function timeForHumans(date) {
     return dayjs(date, "YYYY-MM-DD hh:mm:ss").fromNow();
 }
+export function getAutoLogin(user) {
+    axios
+        .post("/user/getAutoLogin", {
+            user_id: user.UserID,
+        })
+        .then((response) => {
+            console.log(response.data.url);
+            this.autologin_url = response.data.url;
+            this.auto_loading = false;
+        })
+        .catch((error) => {
+            console.log(error);
+            this.auto_loading = false;
+        });
+}

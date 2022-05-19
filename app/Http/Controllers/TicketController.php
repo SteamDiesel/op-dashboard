@@ -245,12 +245,8 @@ class TicketController extends Controller
     public function reassign(Ticket $ticket, Request $request)
     {
         //
-
-
         $newuser = User::findOrFail($request->new_user_id);
-
         $ticket->user()->associate($newuser);
-
 
         if ($ticket->save()) {
             $user = Auth::user();
@@ -348,6 +344,32 @@ class TicketController extends Controller
         } else {
             return "You're not on the same team!";
         }
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Models\Ticket  $ticket
+     * @return \Illuminate\Http\Response
+     */
+    public function ticketActivity(Ticket $ticket, Request $request)
+    {
+        //
+        $user = Auth::user();
+
+        $a = new Activity;
+        $a->user()->associate($user);
+        $a->team()->associate($user->currentTeam);
+        $a->ticket()->associate($ticket);
+        $a->type = $request->type;
+        $a->endpoint = $request->endpoint;
+        $a->parameters = $request->parameters;
+        $a->result = $request->result;
+        $a->details = $request->details;
+        $a->save();
+        return response()->json([
+            'message' => 'Ticket activity logged',
+        ]);
     }
 
     /**

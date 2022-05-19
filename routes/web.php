@@ -60,17 +60,16 @@ Route::middleware([
     Route::get('/tickets/team/closed', [TicketController::class, 'team_closed_index']);
     Route::get('/ticket/{ticket}', [TicketController::class, 'show']);
     Route::get('/ticket/{ticket}/{page}', [TicketController::class, 'page']);
-    // Route::get('/ticket/{ticket}/users', [TicketController::class, 'users']);
-    // Route::get('/ticket/{ticket}/dive', [TicketController::class, 'dive']);
 
     Route::get('/tickets/new', [TicketController::class, 'create']);
     Route::post('/ticket/update/{ticket}', [TicketController::class, 'update']);
     Route::post('/ticket/reassign/{ticket}', [TicketController::class, 'reassign']);
     Route::post('/ticket/open/{ticket}', [TicketController::class, 'open']);
     Route::post('/ticket/close/{ticket}', [TicketController::class, 'close']);
+    Route::post('/ticket/activity/{ticket}', [TicketController::class, 'ticketActivity']);
 
     // Ticket API Post Calls
-    Route::post('/ticket/api/getUser', [OurPropertyUser::class, 'fetch']);
+    Route::post('/ticket/api/getUser', [TicketApiController::class, 'getUser']);
     Route::post('/ticket/api/mergeUsers', [TicketApiController::class, 'mergeUsers']);
     Route::post('/ticket/api/getUserTenancies', [TicketApiController::class, 'getUserTenancies']);
     Route::post('/ticket/api/getPropertyTenancies', [TicketApiController::class, 'getPropertyTenancies']);
@@ -87,8 +86,12 @@ Route::middleware([
     Route::get('/user/{user_id}', [OurPropertyUser::class, 'show']);
     Route::post('/user/getProperties', [OurPropertyUser::class, 'properties']);
     Route::post('/user/getTenancy', [OurPropertyUser::class, 'tenancies']);
+    Route::post('/user/getAutoLogin', [OurPropertyUser::class, 'autologin']);
     Route::post('/getAgency', [OurPropertyUser::class, 'agency']);
 
+    // Properties
+    Route::get('/properties', [OPPropertyController::class, 'index']);
+    Route::get('/property/{property_id}', [OPPropertyController::class, 'show']);
 
 
     Route::get('/tinkering', function () {

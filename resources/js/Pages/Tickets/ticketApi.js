@@ -47,13 +47,28 @@ export function openTicket(id) {
             console.log(error);
         });
 }
+export function ticketActivity(activity) {
+    axios
+        .post("/ticket/activity/" + activity.ticket_id, {
+            type: activity.type,
+            endpoint: activity.endpoint,
+            parameters: activity.parameters,
+            result: activity.result,
+            details: activity.details,
+        })
+        .then((response) => {
+            console.log(response.data.message);
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+}
 export function fetchUserTenancy() {
     axios
         .post("/ticket/api/getUserTenancies", {
             id: this.user.UserID,
         })
         .then((response) => {
-            console.log(response.data);
             this.user.tenancies = response.data.tcy;
             this.saveTicket();
         })
@@ -67,14 +82,13 @@ export function fetchPropertyTenancies() {
     console.log(ids);
     this.property.tenancies = [];
     ids.forEach((e) => {
-        console.log("getting tenancy for " + e);
         axios
             .post("/ticket/api/getUserTenancies", {
                 id: e,
             })
             .then((response) => {
                 let tar = response.data.tcy[0];
-                console.log();
+
                 if (tar !== 0) {
                     this.property.tenancies.push(response.data.tcy[0]);
                 } else {
@@ -94,7 +108,6 @@ export function fetchProperty() {
             user_id: this.user.UserID,
         })
         .then((response) => {
-            console.log(response.data.data);
             this.user.properties = response.data.pty;
             this.saveTicket();
         })
@@ -104,8 +117,14 @@ export function fetchProperty() {
         });
 }
 export function addTask() {
-    console.log("adding task");
-    console.log(this.$page.props.ticket);
+    var activity = {
+        ticket_id: this.$page.props.ticket.id,
+        type: "task",
+        endpoint: "NA",
+        parameters: "NA",
+        result: "Success",
+        details: "added a new task.",
+    };
     let $task = {
         title: "",
         is_complete: false,
@@ -116,21 +135,10 @@ export function addTask() {
         this.$page.props.ticket.tasks = [];
         this.$page.props.ticket.tasks.push($task);
     }
-
-    console.log(this.$page.props.ticket.tasks);
-}
-export function saveTask(task, index) {
-    if (task.title == "") {
-        console.log("Dropping empty task " + index);
-        this.$page.props.ticket.tasks.splice(index, 1);
-    }
-    this.saveTicket(this.$page.props.ticket);
+    this.ticketActivity(activity);
 }
 
 export function addUser(u) {
-    console.log("addUser fired");
-
-    console.log(u);
     if (this.$page.props.ticket.users == null) {
         this.$page.props.ticket.users = [];
     }
@@ -140,11 +148,9 @@ export function addUser(u) {
     this.saveTicket(this.$page.props.ticket);
 }
 export function dropUser(user) {
-    console.log(user);
     let index = this.$page.props.ticket.users.findIndex((u) => {
         return u.UserID == user.UserID;
     });
-    console.log(index);
 
     this.$page.props.ticket.users.splice(index, 1);
     this.saveTicket(this.$page.props.ticket);
