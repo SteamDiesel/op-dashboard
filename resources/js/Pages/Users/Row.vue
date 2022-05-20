@@ -5,8 +5,20 @@
 			<div class="flex items-center">
 				<div class="">
 					<div class="font-medium text-gray-900">
-						{{ person.FirstName }}
-						{{ person.LastName }}
+						<Link
+							:href="'/user/' + person.UserID"
+							class="
+								text-indigo-600
+								hover:text-indigo-900
+								font-semibold
+							"
+						>
+							{{ person.FirstName }}
+							{{ person.LastName }}
+							<span class="sr-only"
+								>, {{ person.UserID }}</span
+							></Link
+						>
 					</div>
 					<div class="text-gray-500">
 						{{ person.Email }}
@@ -59,7 +71,8 @@
 			>
 		</td>
 		<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-			{{ person.UserType.toUpperCase() }}
+			{{ person.UserType.toUpperCase() }} <br />
+			{{ person.UserTitle }}
 		</td>
 		<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
 			{{ person.AgencyId }}
@@ -73,43 +86,17 @@
 				text-right text-sm
 				font-medium
 				w-12
-			"
-		>
-			<div v-if="!auto_loading">
-				<button @click="AutoLoginButton" v-if="!autologin_url" class="">
-					<ImpersonateGray class="h-8" />
-				</button>
-				<a v-if="autologin_url" :href="autologin_url">
-					<ImpersonateBlue class="h-8" />
-				</a>
-			</div>
-			<div v-if="auto_loading">
-				<img class="h-8" src="/images/spinner.gif" alt="loading" />
-			</div>
-		</td>
-		<td
-			class="
-				relative
-				whitespace-nowrap
-				py-4
 				pl-3
-				pr-4
-				text-right text-sm
-				font-medium
-				sm:pr-6
+				pr-6
 			"
 		>
-			<Link
-				:href="'/user/' + person.UserID"
-				class="text-indigo-600 hover:text-indigo-900"
-				>View<span class="sr-only">, {{ person.UserID }}</span></Link
-			>
+			<AutoLogin :user="person" />
 		</td>
 	</tr>
 </template>
 
 <script>
-import { getAutoLogin } from "../Helpers";
+import AutoLogin from "../Buttons/AutoLogin.vue";
 import Secondary from "../Buttons/Secondary.vue";
 import ImpersonateGray from "../Icons/ImpersonateGray.vue";
 import ImpersonateBlue from "../Icons/ImpersonateBlue.vue";
@@ -121,18 +108,9 @@ export default {
 		person: Object,
 	},
 	data() {
-		return {
-			auto_loading: false,
-			autologin_url: "",
-		};
+		return {};
 	},
-	methods: {
-		getAutoLogin,
-		AutoLoginButton() {
-			this.auto_loading = true;
-			this.getAutoLogin(this.person);
-		},
-	},
-	components: { Secondary, ImpersonateGray, ImpersonateBlue },
+	methods: {},
+	components: { AutoLogin },
 };
 </script>

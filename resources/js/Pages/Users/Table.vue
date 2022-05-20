@@ -86,30 +86,18 @@
 									>
 										AgencyID
 									</th>
-
 									<th
 										scope="col"
 										class="
-											relative
-											py-3.5
 											pl-3
-											pr-4
-											sm:pr-6
+											pr-6
+											py-3.5
+											text-left text-sm
+											font-semibold
+											text-gray-900
 										"
 									>
-										<span class="sr-only">AutoLogin</span>
-									</th>
-									<th
-										scope="col"
-										class="
-											relative
-											py-3.5
-											pl-3
-											pr-4
-											sm:pr-6
-										"
-									>
-										<span class="sr-only">Edit</span>
+										Login
 									</th>
 								</tr>
 							</thead>
@@ -129,7 +117,6 @@
 </template>
 
 <script>
-import { getAutoLogin } from "../Helpers";
 import Row from "./Row.vue";
 
 export default {
@@ -142,9 +129,7 @@ export default {
 	data() {
 		return {};
 	},
-	methods: {
-		getAutoLogin,
-	},
+	methods: {},
 	components: { Row },
 };
 </script>

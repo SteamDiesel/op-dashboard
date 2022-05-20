@@ -37,6 +37,9 @@
 					>
 				</p>
 			</div>
+			<div>
+				<AutoLogin :user="user" />
+			</div>
 			<div class="flex-shrink-0 flex">
 				<slot></slot>
 			</div>
@@ -45,6 +48,7 @@
 </template>
 
 <script>
+import AutoLogin from "../../Buttons/AutoLogin.vue";
 import { objectExpression } from "@babel/types";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
 import {
@@ -64,6 +68,7 @@ export default {
 		DotsVerticalIcon,
 		FlagIcon,
 		StarIcon,
+		AutoLogin,
 	},
 	props: {
 		user: Object,

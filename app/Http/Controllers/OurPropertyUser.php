@@ -164,25 +164,36 @@ class OurPropertyUser extends Controller
     public function autologin(Request $request)
     {
         //
-        return response()->json([
-            'url' => "https://propertymanager.our.property/?autologin=7e9aa9c1ee8dd1b404a8b762a1a85d5d",
-            'message' => "request was successful, autologin link attached."
-        ]);
+
+        // return response()->json([
+        //     'url' => "https://propertymanager.our.property/?autologin=7e9aa9c1ee8dd1b404a8b762a1a85d5d",
+        //     'message' => "request was successful, autologin link attached."
+        // ]);
         $token = Auth::user()->currentTeam->access_token;
-        $endpoint = env('API_URL') . '/api/GetUserInfo';
+        $endpoint = env('API_URL') . '/api/GetAutoLogin';
 
         // first get the user
         if ($request->email) {
 
             $response = Http::withToken($token)->acceptJson()
                 ->get($endpoint, [
-                    'Email' => $request->email
+                    'Username' => $request->email,
+                    'Portal' => $request->portal
                 ]);
+        }
+        if ($request->user_id) {
+
+            $response = Http::withToken($token)->acceptJson()
+                ->get($endpoint, [
+                    'UserID' => $request->user_id,
+                    'Portal' => $request->portal
+                ]);
+            // return $response;
         }
 
         if ($response->successful()) {
             return response()->json([
-                'users' => $users,
+                'url' => $response->object()->data,
                 'message' => "request was successful, all users are attached as an array."
             ]);
         } else {

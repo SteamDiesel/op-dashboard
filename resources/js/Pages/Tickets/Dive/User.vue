@@ -26,7 +26,6 @@
 				Email: {{ user.Email }} | Mobile: {{ user.Mobile }} | Agency ID:
 				{{ user.AgencyId }}
 			</div>
-			<div class="w-1/4"></div>
 		</div>
 		<!-- related objects -->
 		<div class="w-full flex">

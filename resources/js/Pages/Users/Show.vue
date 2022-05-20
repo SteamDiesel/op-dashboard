@@ -1,6 +1,6 @@
 <script setup>
 import MainLayout from "@/Layouts/Main.vue";
-
+import AutoLogin from "../Buttons/AutoLogin.vue";
 import { Inertia } from "@inertiajs/inertia";
 import { reactive } from "vue";
 import Primary from "../Buttons/Primary.vue";
@@ -57,7 +57,7 @@ const getAgency = function (u) {
 
 		<div class="flex justify-between">
 			<div class="flex gap-6">
-				<Primary @click.prevent="getProperties($attrs.u)"
+				<!-- <Primary @click.prevent="getProperties($attrs.u)"
 					>+ Properties</Primary
 				>
 
@@ -66,7 +66,8 @@ const getAgency = function (u) {
 				>
 				<Primary @click.prevent="getAgency($attrs.u)"
 					>+ Agency Details</Primary
-				>
+				> -->
+				<AutoLogin :user="$attrs.u"></AutoLogin>
 			</div>
 			<div class="flex">
 				<!-- <Secondary>Edit</Secondary> -->
