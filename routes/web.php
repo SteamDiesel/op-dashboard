@@ -40,7 +40,7 @@ Route::get('/', function () {
 });
 
 
-
+Route::get('/user/AutoLogin', [OurPropertyUser::class, 'goAutoLogin']);
 
 
 Route::middleware([
@@ -86,7 +86,6 @@ Route::middleware([
     Route::get('/user/{user_id}', [OurPropertyUser::class, 'show']);
     Route::post('/user/getProperties', [OurPropertyUser::class, 'properties']);
     Route::post('/user/getTenancy', [OurPropertyUser::class, 'tenancies']);
-    Route::post('/user/getAutoLogin', [OurPropertyUser::class, 'autologin']);
     Route::post('/getAgency', [OurPropertyUser::class, 'agency']);
 
     // Properties

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Activity;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
@@ -155,21 +156,42 @@ class OurPropertyUser extends Controller
             ]);
         }
     }
+
     /**
      * Display the specified resource.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function autologin(Request $request)
+    public function goAutoLogin(Request $request)
     {
         //
+        $portal = "PM";
+        switch ($request->user_type) {
+            case "t":
+                $portal = "T";
+                break;
+            case "":
+                $portal = "O";
+                break;
+            case "ll":
+                $portal = "LL";
+                break;
+            case "tr":
+                $portal = "TR";
+                break;
+            case "pm":
+                $portal = "PM";
+                break;
+            case "OA":
+                $portal = "PM";
+                break;
+            case "OM":
+                $portal = "PM";
+                break;
+        }
 
-        // return response()->json([
-        //     'url' => "https://propertymanager.our.property/?autologin=7e9aa9c1ee8dd1b404a8b762a1a85d5d",
-        //     'message' => "request was successful, autologin link attached."
-        // ]);
-        $token = Auth::user()->currentTeam->access_token;
+        $token = User::find($request->a)->currentTeam->access_token;
         $endpoint = env('API_URL') . '/api/GetAutoLogin';
 
         // first get the user
@@ -178,7 +200,7 @@ class OurPropertyUser extends Controller
             $response = Http::withToken($token)->acceptJson()
                 ->get($endpoint, [
                     'Username' => $request->email,
-                    'Portal' => $request->portal
+                    'Portal' => $portal
                 ]);
         }
         if ($request->user_id) {
@@ -186,16 +208,13 @@ class OurPropertyUser extends Controller
             $response = Http::withToken($token)->acceptJson()
                 ->get($endpoint, [
                     'UserID' => $request->user_id,
-                    'Portal' => $request->portal
+                    'Portal' => $portal
                 ]);
             // return $response;
         }
 
         if ($response->successful()) {
-            return response()->json([
-                'url' => $response->object()->data,
-                'message' => "request was successful, all users are attached as an array."
-            ]);
+            return redirect()->away($response->object()->data);
         } else {
             return response()->json([
                 'message' => "The request failed. Maybe this app is not authenticated?"
