@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Activity;
 use App\Models\User;
+use DateTime;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Inertia\Inertia;
@@ -166,60 +168,75 @@ class OurPropertyUser extends Controller
     public function goAutoLogin(Request $request)
     {
         //
-        $portal = "PM";
-        switch ($request->user_type) {
-            case "t":
-                $portal = "T";
-                break;
-            case "":
-                $portal = "O";
-                break;
-            case "ll":
-                $portal = "LL";
-                break;
-            case "tr":
-                $portal = "TR";
-                break;
-            case "pm":
-                $portal = "PM";
-                break;
-            case "OA":
-                $portal = "PM";
-                break;
-            case "OM":
-                $portal = "PM";
-                break;
+
+        $proceed = false;
+        $solved = $request->token / 36 + 120;
+
+        $expiry = date('Y-m-d h:i:s', $solved);
+        $server = date('Y-m-d h:i:s', floor(microtime(true)));
+        $expiry_time = new DateTime($expiry);
+        $server_time = new DateTime($server);
+
+        if ($expiry_time > $server_time) {
+            $proceed = true;
         }
+        if ($proceed) {
+            // return "valid link - expiry: " . $expiry . " - current time: " . $server;
+            $portal = "PM";
+            switch ($request->user_type) {
+                case "t":
+                    $portal = "T";
+                    break;
+                case "":
+                    $portal = "O";
+                    break;
+                case "ll":
+                    $portal = "LL";
+                    break;
+                case "tr":
+                    $portal = "TR";
+                    break;
+                case "pm":
+                    $portal = "PM";
+                    break;
+                case "OA":
+                    $portal = "PM";
+                    break;
+                case "OM":
+                    $portal = "PM";
+                    break;
+            }
 
-        $token = User::find($request->a)->currentTeam->access_token;
-        $endpoint = env('API_URL') . '/api/GetAutoLogin';
+            $token = User::find($request->a)->currentTeam->access_token;
+            $endpoint = env('API_URL') . '/api/GetAutoLogin';
 
-        // first get the user
-        if ($request->email) {
+            // first get the user
+            // if ($request->email) {
 
-            $response = Http::withToken($token)->acceptJson()
-                ->get($endpoint, [
-                    'Username' => $request->email,
-                    'Portal' => $portal
+            //     $response = Http::withToken($token)->acceptJson()
+            //         ->get($endpoint, [
+            //             'Username' => $request->email,
+            //             'Portal' => $portal
+            //         ]);
+            // }
+            if ($request->user_id) {
+
+                $response = Http::withToken($token)->acceptJson()
+                    ->get($endpoint, [
+                        'UserID' => $request->user_id,
+                        'Portal' => $portal
+                    ]);
+            }
+
+            if ($response->successful()) {
+                return redirect()->away($response->object()->data);
+            } else {
+                return response()->json([
+                    'message' => "The request failed. Maybe this app is not authenticated?"
                 ]);
+            }
         }
-        if ($request->user_id) {
-
-            $response = Http::withToken($token)->acceptJson()
-                ->get($endpoint, [
-                    'UserID' => $request->user_id,
-                    'Portal' => $portal
-                ]);
-            // return $response;
-        }
-
-        if ($response->successful()) {
-            return redirect()->away($response->object()->data);
-        } else {
-            return response()->json([
-                'message' => "The request failed. Maybe this app is not authenticated?"
-            ]);
-        }
+        return "This link is dead.";
     }
 
     /**
