@@ -1,11 +1,8 @@
-<script setup>
+<script>
 import MainLayout from "@/Layouts/Main.vue";
 import AutoLogin from "../Buttons/AutoLogin.vue";
-import { Inertia } from "@inertiajs/inertia";
-import { reactive } from "vue";
-import Primary from "../Buttons/Primary.vue";
-import Secondary from "../Buttons/Secondary.vue";
 import axios from "axios";
+import SearchBar from "./SearchBar.vue";
 
 const getProperties = function (u) {
 	u.properties = "please wait...";
@@ -49,12 +46,20 @@ const getAgency = function (u) {
 			console.log(error);
 		});
 };
+export default {
+	components: {
+		SearchBar,
+		MainLayout,
+		AutoLogin,
+	},
+};
 </script>
 
 <template>
 	<MainLayout :title="$attrs.u.FirstName + ' ' + $attrs.u.LastName">
-		<div v-if="$attrs.u"></div>
-
+		<template v-slot:searchbar>
+			<SearchBar class="mt-4" />
+		</template>
 		<div class="flex justify-between">
 			<div class="flex gap-6">
 				<!-- <Primary @click.prevent="getProperties($attrs.u)"

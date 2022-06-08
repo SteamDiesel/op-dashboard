@@ -22,6 +22,8 @@ class OurPropertyUser extends Controller
     {
         //
         $endpoint = env('API_URL') . '/api/GetUserInfo';
+        $search = false;
+
         if ($request->email) {
 
             $response = Http::withToken(Auth::user()->currentTeam->access_token)->acceptJson()
@@ -29,18 +31,19 @@ class OurPropertyUser extends Controller
                     'Email' => $request->email
                 ]);
             if ($response->successful()) {
-                if (is_array($response->object()->data)) {
-                    return Inertia::render('Users/Index', [
-                        'users' => $response->object()->data
-                    ]);
-                }
-                if (is_object($response->object()->data)) {
-                    $users = [];
-                    array_push($users, $response->object()->data);
-                    return Inertia::render('Users/Index', [
-                        'users' => $users
-                    ]);
-                }
+                $search = true;
+            } else {
+                return redirect('/auth/refresh');
+            }
+        }
+        if ($request->mobile) {
+
+            $response = Http::withToken(Auth::user()->currentTeam->access_token)->acceptJson()
+                ->get($endpoint, [
+                    'Mobile' => $request->mobile
+                ]);
+            if ($response->successful()) {
+                $search = true;
             } else {
                 return redirect('/auth/refresh');
             }
@@ -53,22 +56,24 @@ class OurPropertyUser extends Controller
                     'AgencyID' => $request->agency_id,
                     'UserType' => $request->user_type
                 ]);
-
             if ($response->successful()) {
-                if (is_array($response->object()->data)) {
-                    return Inertia::render('Users/Index', [
-                        'users' => $response->object()->data
-                    ]);
-                }
-                if (is_object($response->object()->data)) {
-                    $users = [];
-                    array_push($users, $response->object()->data);
-                    return Inertia::render('Users/Index', [
-                        'users' => $users
-                    ]);
-                }
+                $search = true;
             } else {
                 return redirect('/auth/refresh');
+            }
+        }
+        if ($search) {
+            if (is_array($response->object()->data)) {
+                return Inertia::render('Users/Index', [
+                    'users' => $response->object()->data
+                ]);
+            }
+            if (is_object($response->object()->data)) {
+                $users = [];
+                array_push($users, $response->object()->data);
+                return Inertia::render('Users/Index', [
+                    'users' => $users
+                ]);
             }
         }
 

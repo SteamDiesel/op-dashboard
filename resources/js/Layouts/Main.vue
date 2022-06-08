@@ -325,6 +325,9 @@
 								<slot name="header"></slot>
 							</div>
 						</div>
+						<div class="mx-auto px-4 sm:px-6 md:px-8">
+							<slot name="searchbar"></slot>
+						</div>
 						<div class="w-full mx-auto px-4 sm:px-6 md:px-8">
 							<!-- Replace with your content -->
 							<div class="py-4">
