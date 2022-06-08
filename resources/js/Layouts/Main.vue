@@ -371,12 +371,12 @@ const navigation = [
 	},
 
 	{ name: "Users", href: "/users", prefix: "/user", icon: UsersIcon },
-	// {
-	// 	name: "Properties",
-	// 	href: "/properties",
-	// 	prefix: "/propert",
-	// 	icon: HomeIcon,
-	// },
+	{
+		name: "Properties",
+		href: "/properties",
+		prefix: "/propert",
+		icon: HomeIcon,
+	},
 	{ name: "Jobs", href: "/jobs", prefix: "/job", icon: ReceiptTaxIcon },
 	// {
 	// 	name: "Test Connection",

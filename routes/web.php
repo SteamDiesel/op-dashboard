@@ -3,6 +3,7 @@
 
 use App\Http\Controllers\ConnectionServiceController;
 use App\Http\Controllers\JobsController;
+use App\Http\Controllers\PropertyController;
 use App\Http\Controllers\OurPropertyUser;
 use App\Http\Controllers\TicketApiController;
 use App\Http\Controllers\TicketController;
@@ -89,9 +90,9 @@ Route::middleware([
     Route::post('/getAgency', [OurPropertyUser::class, 'agency']);
 
     // Properties
-    Route::get('/properties', [OPPropertyController::class, 'index']);
-    Route::get('/property/{property_id}', [OPPropertyController::class, 'show']);
-
+    Route::get('/properties', [PropertyController::class, 'index']);
+    Route::get('/property/{property_id}', [PropertyController::class, 'show']);
+    Route::post('/property/search', [PropertyController::class, 'search']);
 
     Route::get('/tinkering', function () {
 

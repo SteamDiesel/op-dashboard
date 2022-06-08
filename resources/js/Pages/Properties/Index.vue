@@ -1,192 +1,141 @@
 
 <script>
 import MainLayout from "@/Layouts/Main.vue";
+import PropertyTable from "./Table.vue";
 import { Inertia } from "@inertiajs/inertia";
 import ButtonPrimary from "@/Pages/Buttons/Primary.vue";
-import { Link } from "@inertiajs/inertia-vue3";
-import UsersTable from "./Table.vue";
+import axios from "axios";
 export default {
 	components: {
-		ButtonPrimary,
-		Link,
-		UsersTable,
+		PropertyTable,
 		MainLayout,
+		ButtonPrimary,
 	},
 	data() {
 		return {
-			email: "",
-			user_id: "",
+			result: [],
+			address: "",
+			property_id: "",
 			agency_id: "",
-			user_type: "PM",
+			loading: false,
+			error: "",
 		};
 	},
-
 	methods: {
-		byEmail() {
-			Inertia.get(
-				"/users",
-				{ email: this.email },
-				{ preserveState: true }
-			);
+		search() {
+			if (this.address.length >= 6) {
+				this.loading = true;
+				axios
+					.post("/property/search", {
+						address: this.address,
+					})
+					.then((response) => {
+						this.result = response.data.properties;
+						console.log(response.data.properties);
+						this.loading = false;
+					})
+					.catch((error) => {
+						console.log(error);
+						this.error = error;
+						this.loading = false;
+					});
+			}
 		},
-		byAgency() {
-			Inertia.get(
-				"/users",
-				{ agency_id: this.agency_id, user_type: this.user_type },
-				{ preserveState: true }
-			);
+		clearFields(field) {
+			switch (field) {
+				case "address":
+					this.property_id = "";
+					break;
+				case "property_id":
+					this.address = "";
+					break;
+			}
 		},
-		byUserID() {
-			Inertia.visit("/user/" + this.user_id);
-		},
-		userType($val) {
-			this.user_type = $val;
+
+		byPropertyId() {
+			Inertia.visit("/property/" + this.property_id);
 		},
 	},
 };
 </script>
 
 <template>
-	<MainLayout title="Users">
-		<div class="flex justify-start">
-			<div class="max-w-xs mr-8">
-				<label class="block text-sm font-medium text-gray-700"
-					>User email</label
-				>
-				<div class="mt-1 flex">
-					<input
-						autocomplete="off"
-						type="email"
-						v-model="email"
-						@keydown.enter="byEmail"
-						class="
-							shadow-sm
-							max-w-xs
-							focus:ring-indigo-500 focus:border-indigo-500
-							block
-							w-full
-							sm:text-sm
-							border-gray-300
-							rounded-md
-							p-2
-							mr-2
-						"
-						placeholder="eg. l_somerville@outlook.com"
-						aria-describedby="user's email address"
-					/>
-
-					<ButtonPrimary @click="byEmail">Find</ButtonPrimary>
-				</div>
-			</div>
-			<div class="max-w-xs mr-8">
-				<label
-					for="email"
-					class="block text-sm font-medium text-gray-700"
-					>By User ID</label
-				>
-				<div class="mt-1 flex">
-					<input
-						autocomplete="off"
-						type="text"
-						v-model="user_id"
-						@keydown.enter="byUserID"
-						class="
-							shadow-sm
-							max-w-xs
-							focus:ring-indigo-500 focus:border-indigo-500
-							block
-							w-full
-							sm:text-sm
-							border-gray-300
-							rounded-md
-							p-2
-							mr-2
-						"
-						placeholder="eg. 74159"
-						aria-describedby="user's I.D. number"
-					/>
-
-					<ButtonPrimary @click="byUserID">Find</ButtonPrimary>
-				</div>
-			</div>
-			<div class="max-w-xs">
-				<label
-					for="price"
-					class="block text-sm font-medium text-gray-700"
-					>By Agency ID</label
-				>
-				<div class="mt-1 flex">
-					<div class="relative rounded-md shadow-sm mr-2">
-						<div
-							class="
-								absolute
-								inset-y-0
-								left-0
-								flex
-								items-center
-								pointer-events-none
-							"
-						></div>
+	<MainLayout title="Properties">
+		<template v-slot:searchbar>
+			<div class="flex justify-start gap-4 mt-4">
+				<div class="max-w-lg">
+					<label class="sr-only">Address 1</label>
+					<div class="flex">
 						<input
-							v-model="agency_id"
-							@keydown.enter="byAgency"
 							autocomplete="off"
 							type="text"
+							v-model="address"
+							@click="clearFields('address')"
+							@change="clearFields('address')"
+							@keyup="search"
 							class="
+								shadow-sm
+								max-w-xs
 								focus:ring-indigo-500 focus:border-indigo-500
 								block
-								max-w-xs
-								pr-12
+								w-full
 								sm:text-sm
 								border-gray-300
 								rounded-md
+								p-2
+								mr-2
 							"
-							placeholder="eg. 74651"
+							placeholder="Address"
+							aria-describedby="Street address"
 						/>
-
-						<div
-							class="absolute inset-y-0 right-0 flex items-center"
-						>
-							<label for="user_type" class="sr-only"
-								>User Type</label
-							>
-							<select
-								v-model="user_type"
-								id="user_type"
-								name="user_type"
-								class="
-									focus:ring-indigo-500
-									focus:border-indigo-500
-									h-full
-									py-0
-									pl-2
-									pr-7
-									border-transparent
-									bg-transparent
-									text-gray-500
-									sm:text-sm
-									rounded-md
-								"
-							>
-								<option @click="userType('PM')" value="PM">
-									PM
-								</option>
-								<option @click="userType('LL')" value="LL">
-									LL
-								</option>
-								<option @click="userType('T')" value="T">
-									T
-								</option>
-							</select>
-						</div>
 					</div>
-
-					<ButtonPrimary @click="byAgency">Find</ButtonPrimary>
 				</div>
+				<div class="max-w-xs">
+					<label class="sr-only">Property ID</label>
+					<div class="flex">
+						<input
+							autocomplete="off"
+							type="text"
+							v-model="property_id"
+							@change="clearFields('property_id')"
+							@click="clearFields('property_id')"
+							@keydown.enter="byPropertyId"
+							class="
+								shadow-sm
+								max-w-xs
+								focus:ring-indigo-500 focus:border-indigo-500
+								block
+								w-full
+								sm:text-sm
+								border-gray-300
+								rounded-md
+								p-2
+								mr-2
+							"
+							placeholder="Property ID"
+							aria-describedby="Property ID"
+						/>
+					</div>
+				</div>
+
+				<!-- <div class="">
+					<ButtonPrimary @click="byPropertyId">Search</ButtonPrimary>
+				</div> -->
 			</div>
+		</template>
+		<div v-if="loading" class="px-4 absolute">
+			<span
+				><img class="h-5" src="/images/spinner.gif" alt="loading"
+			/></span>
 		</div>
-		<div>
-			<UsersTable :people="$attrs.users"></UsersTable>
+		<div class="">
+			<PropertyTable :properties="result"></PropertyTable>
+		</div>
+		<div v-if="error" class="p-4">
+			<span class="text-red-700 font-semibold">{{ error }}</span> <br />
+			<span class="text-gray-700 text-sm"
+				>Check the console and report this error</span
+			>
 		</div>
 	</MainLayout>
 </template>
