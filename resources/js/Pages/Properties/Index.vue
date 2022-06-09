@@ -62,7 +62,7 @@ export default {
 <template>
 	<MainLayout title="Properties">
 		<template v-slot:searchbar>
-			<div class="flex justify-start gap-4 mt-4">
+			<div class="flex justify-start gap-4">
 				<div class="max-w-lg">
 					<label class="sr-only">Address 1</label>
 					<div class="flex">
@@ -88,6 +88,14 @@ export default {
 							placeholder="Address"
 							aria-describedby="Street address"
 						/>
+						<div v-if="loading" class="absolute mt-2 ml-40">
+							<span
+								><img
+									class="h-5"
+									src="/images/spinner.gif"
+									alt="loading"
+							/></span>
+						</div>
 					</div>
 				</div>
 				<div class="max-w-xs">
@@ -123,11 +131,11 @@ export default {
 				</div> -->
 			</div>
 		</template>
-		<div v-if="loading" class="px-4 absolute">
+		<!-- <div v-if="loading" class="pl-10 absolute -mt-6">
 			<span
 				><img class="h-5" src="/images/spinner.gif" alt="loading"
 			/></span>
-		</div>
+		</div> -->
 		<div class="">
 			<PropertyTable :properties="result"></PropertyTable>
 		</div>

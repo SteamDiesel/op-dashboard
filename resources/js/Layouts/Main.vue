@@ -316,6 +316,7 @@
 								px-4
 								sm:px-6
 								md:px-8
+								pb-4
 							"
 						>
 							<h1 class="text-2xl font-semibold text-gray-900">
@@ -330,7 +331,7 @@
 						</div>
 						<div class="w-full mx-auto px-4 sm:px-6 md:px-8">
 							<!-- Replace with your content -->
-							<div class="py-4">
+							<div class="pb-4">
 								<slot></slot>
 							</div>
 							<!-- /End replace -->

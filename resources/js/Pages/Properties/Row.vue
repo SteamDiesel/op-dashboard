@@ -4,9 +4,14 @@
 			{{ adr.PropertyID }}
 		</td>
 		<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-			{{ adr.Address1 }}
-			{{ adr.Address2 }}
-			{{ adr.Suburb }} {{ adr.State }}
+			<Link
+				class="text-indigo-600 hover:text-indigo-900 font-semibold"
+				:href="'/property/' + adr.PropertyID"
+			>
+				{{ adr.Address1 }}
+				{{ adr.Address2 }}
+				{{ adr.Suburb }} {{ adr.State }}
+			</Link>
 		</td>
 		<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
 			{{ adr.AgencyName }} <br />

@@ -1,4 +1,3 @@
-<!-- This example requires Tailwind CSS v2.0+ -->
 <template>
 	<div class="">
 		<div class="mt-8 flex flex-col">

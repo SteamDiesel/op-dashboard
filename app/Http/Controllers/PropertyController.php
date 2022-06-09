@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Inertia\Inertia;
 
+use function PHPUnit\Framework\objectEquals;
+
 class PropertyController extends Controller
 {
     //
@@ -18,6 +20,24 @@ class PropertyController extends Controller
     public function index()
     {
         return Inertia::render('Properties/Index');
+    }
+    //
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function show($property_id)
+    {
+        $adr = ([
+            "Address1" => "Shop 13/ 361 Cnr Markeri St & Robina Parkway ROBINA QLD",
+            "PropertyID" => $property_id
+        ]);
+
+
+        return Inertia::render('Properties/Show', [
+            'property' => $adr
+        ]);
     }
     //
     /**

@@ -25,6 +25,30 @@ export default {
 		},
 	},
 	methods: {
+		clearFields(field) {
+			switch (field) {
+				case "property_id":
+					(this.job_id = ""), (this.agency_id = "");
+					break;
+				case "job_id":
+					(this.property = ""), (this.agency_id = "");
+					break;
+				case "agency_id":
+					(this.property_id = ""), (this.job_id = "");
+					break;
+			}
+		},
+		search() {
+			if (this.property_id) {
+				this.byProperty();
+			}
+			if (this.job_id) {
+				this.byJobID();
+			}
+			if (this.agency_id) {
+				this.byAgency();
+			}
+		},
 		byProperty() {
 			Inertia.get(
 				"/jobs",
@@ -51,20 +75,18 @@ export default {
 
 <template>
 	<MainLayout title="Find Jobs">
-		<div class="flex justify-start">
+		<div class="flex gap-4">
 			<!-- by Job ID -->
-			<div class="max-w-xs mr-8">
-				<label
-					for="email"
-					class="block text-sm font-medium text-gray-700"
-					>By Job ID</label
-				>
-				<div class="mt-1 flex">
+			<div class="max-w-xs">
+				<label for="email" class="sr-only">By Job ID</label>
+				<div class="flex">
 					<input
 						autocomplete="off"
 						type="text"
 						v-model="job_id"
 						@keydown.enter="byJobID"
+						@click="clearFields('job_id')"
+						@change="clearFields('job_id')"
 						class="
 							shadow-sm
 							max-w-xs
@@ -77,25 +99,23 @@ export default {
 							p-2
 							mr-2
 						"
-						placeholder="eg. 74159"
-						aria-describedby="user's I.D. number"
+						placeholder="Job ID"
+						aria-describedby="job's I.D. number"
 					/>
-
-					<ButtonPrimary @click="byJobID">Find</ButtonPrimary>
 				</div>
 			</div>
 
 			<!-- By Property ID -->
-			<div class="max-w-xs mr-8">
-				<label class="block text-sm font-medium text-gray-700"
-					>By Property ID</label
-				>
-				<div class="mt-1 flex">
+			<div class="max-w-xs">
+				<label class="sr-only">By Property ID</label>
+				<div class="flex">
 					<input
 						autocomplete="off"
 						type="email"
 						v-model="property_id"
 						@keydown.enter="byProperty"
+						@click="clearFields('property_id')"
+						@change="clearFields('property_id')"
 						class="
 							shadow-sm
 							max-w-xs
@@ -108,26 +128,22 @@ export default {
 							p-2
 							mr-2
 						"
-						placeholder="eg. 633052"
+						placeholder="Property ID"
 						aria-describedby="property I.D. "
 					/>
-
-					<ButtonPrimary @click="byProperty">Find</ButtonPrimary>
 				</div>
 			</div>
 
-			<div class="max-w-xs mr-8">
-				<label
-					for="email"
-					class="block text-sm font-medium text-gray-700"
-					>By Agency ID</label
-				>
-				<div class="mt-1 flex">
+			<div class="max-w-xs">
+				<label for="email" class="sr-only">By Agency ID</label>
+				<div class="flex">
 					<input
 						autocomplete="off"
 						type="text"
 						v-model="agency_id"
 						@keydown.enter="byAgency"
+						@click="clearFields('agency_id')"
+						@change="clearFields('agency_id')"
 						class="
 							shadow-sm
 							max-w-xs
@@ -140,12 +156,13 @@ export default {
 							p-2
 							mr-2
 						"
-						placeholder="eg. 74159"
+						placeholder="Agency ID"
 						aria-describedby="agency's I.D. number"
 					/>
-
-					<ButtonPrimary @click="byAgency">Find</ButtonPrimary>
 				</div>
+			</div>
+			<div>
+				<ButtonPrimary @click="search">Search</ButtonPrimary>
 			</div>
 		</div>
 		<div>

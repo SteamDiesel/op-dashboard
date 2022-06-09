@@ -23,10 +23,9 @@ export default {
 <template>
 	<MainLayout title="Users">
 		<template v-slot:searchbar>
-			<SearchBar class="mt-4" />
+			<SearchBar />
 		</template>
-		<div>
-			<UsersTable :people="$attrs.users"></UsersTable>
-		</div>
+
+		<UsersTable :people="$attrs.users"></UsersTable>
 	</MainLayout>
 </template>
