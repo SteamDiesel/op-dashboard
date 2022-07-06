@@ -95,9 +95,7 @@ Route::middleware([
     Route::post('/property/search', [PropertyController::class, 'search']);
 
     Route::get('/tinkering', function () {
-
-        $response = Team::find(1);
-        return $response;
+        return Inertia::render('Tinkering');
     });
     Route::get('/test_email', function () {
         $em = Auth::user()->email;

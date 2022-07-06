@@ -29,30 +29,36 @@ class PropertyController extends Controller
      */
     public function show($property_id)
     {
-        $adr = ([
-            "Address1" => "Shop 13/ 361 Cnr Markeri St & Robina Parkway ROBINA QLD",
-            "PropertyID" => $property_id
-        ]);
 
 
-        return Inertia::render('Properties/Show', [
-            'property' => $adr
-        ]);
+        $endpoint = env('API_URL') . '/api/GetPropertyInfo';
+        $response = Http::withToken(Auth::user()->currentTeam->access_token)->acceptJson()
+            ->get($endpoint, [
+                'ID' => $property_id
+            ]);
+        if ($response->successful()) {
+            return Inertia::render('Properties/Show', [
+                'property' => $response->object()->data
+            ]);
+        } else {
+            return redirect('/auth/refresh');
+        }
     }
     //
     /**
-     * Display a listing of the resource.
+     * Searches for matching properties by the given keyword.
      *
      * @return \Illuminate\Http\Response
      */
     public function search(Request $request)
     {
         $search = false;
-        $endpoint = env('API_URL') . '/api/GetPropertyInfo';
+        $endpoint = env('API_URL') . '/api/searchProperty';
         $response = Http::withToken(Auth::user()->currentTeam->access_token)->acceptJson()
             ->get($endpoint, [
                 'Keyword' => $request->address
             ]);
+
         if ($response->successful()) {
             $search = true;
         } else {

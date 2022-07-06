@@ -5,55 +5,73 @@ import PropertyTable from "./Table.vue";
 import { Inertia } from "@inertiajs/inertia";
 import ButtonPrimary from "@/Pages/Buttons/Primary.vue";
 import axios from "axios";
+import { reactive } from "vue";
+
 export default {
+	setup() {
+		var sd = reactive({
+			result: [],
+			address: "",
+			property_id: "",
+			agency_id: "",
+			pm_id: "",
+			loading: false,
+			error: "",
+			myTimeout: "",
+		});
+
+		const search = function () {
+			this.sd.loading = true;
+			clearTimeout(this.sd.myTimeout);
+			this.sd.myTimeout = setTimeout(() => {
+				console.log(this.sd.address);
+				console.log("running search");
+				axios
+					.post("/property/search", {
+						address: this.sd.address,
+					})
+					.then((response) => {
+						this.sd.result = response.data.properties;
+						console.log(response.data.properties);
+						this.sd.loading = false;
+					})
+					.catch((error) => {
+						console.log(error);
+						this.sd.error = error;
+						this.sd.loading = false;
+					});
+			}, 1000);
+		};
+
+		const clearFields = function (field) {
+			switch (field) {
+				case "address":
+					this.sd.property_id = "";
+					break;
+				case "property_id":
+					this.sd.address = "";
+					break;
+			}
+		};
+
+		return { sd, search, clearFields };
+	},
 	components: {
 		PropertyTable,
 		MainLayout,
 		ButtonPrimary,
 	},
-	data() {
-		return {
-			result: [],
-			address: "",
-			property_id: "",
-			agency_id: "",
-			loading: false,
-			error: "",
-		};
-	},
-	methods: {
-		search() {
-			if (this.address.length >= 6) {
-				this.loading = true;
-				axios
-					.post("/property/search", {
-						address: this.address,
-					})
-					.then((response) => {
-						this.result = response.data.properties;
-						console.log(response.data.properties);
-						this.loading = false;
-					})
-					.catch((error) => {
-						console.log(error);
-						this.error = error;
-						this.loading = false;
-					});
-			}
-		},
-		clearFields(field) {
-			switch (field) {
-				case "address":
-					this.property_id = "";
-					break;
-				case "property_id":
-					this.address = "";
-					break;
-			}
-		},
 
+	methods: {
+		autoSearch() {
+			if (this.sd.address.length >= 6) {
+				this.search();
+			} else {
+				console.log("Autosearch needs 6 characters or more.");
+			}
+		},
 		byPropertyId() {
-			Inertia.visit("/property/" + this.property_id);
+			Inertia.visit("/property/" + this.sd.property_id);
 		},
 	},
 };
@@ -67,12 +85,14 @@ export default {
 					<label class="sr-only">Address 1</label>
 					<div class="flex">
 						<input
+							title="will auto-search 1 second after last keystroke if more than 6 characters. press enter to force search."
 							autocomplete="off"
 							type="text"
-							v-model="address"
+							v-model="sd.address"
 							@click="clearFields('address')"
 							@change="clearFields('address')"
-							@keyup="search"
+							@keyup="autoSearch"
+							@keydown.enter="search"
 							class="
 								shadow-sm
 								max-w-xs
@@ -88,7 +108,7 @@ export default {
 							placeholder="Address"
 							aria-describedby="Street address"
 						/>
-						<div v-if="loading" class="absolute mt-2 ml-40">
+						<div v-if="sd.loading" class="absolute mt-2 ml-40">
 							<span
 								><img
 									class="h-5"
@@ -104,7 +124,7 @@ export default {
 						<input
 							autocomplete="off"
 							type="text"
-							v-model="property_id"
+							v-model="sd.property_id"
 							@change="clearFields('property_id')"
 							@click="clearFields('property_id')"
 							@keydown.enter="byPropertyId"
@@ -137,10 +157,11 @@ export default {
 			/></span>
 		</div> -->
 		<div class="">
-			<PropertyTable :properties="result"></PropertyTable>
+			<PropertyTable :properties="sd.result"></PropertyTable>
 		</div>
-		<div v-if="error" class="p-4">
-			<span class="text-red-700 font-semibold">{{ error }}</span> <br />
+		<div v-if="sd.error" class="p-4">
+			<span class="text-red-700 font-semibold">{{ sd.error }}</span>
+			<br />
 			<span class="text-gray-700 text-sm"
 				>Check the console and report this error</span
 			>
