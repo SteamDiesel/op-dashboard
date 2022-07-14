@@ -44,7 +44,7 @@ export default {
 						user_type: this.user_type,
 						page: 1,
 					},
-					{ preserveState: true }
+					{ preserveState: false }
 				);
 			}
 		},
@@ -87,8 +87,12 @@ export default {
 		byAgency() {
 			Inertia.get(
 				"/users",
-				{ agency_id: this.agency_id, user_type: this.user_type },
-				{ preserveState: true }
+				{
+					agency_id: this.agency_id,
+					user_type: this.user_type,
+					page: 1,
+				},
+				{ preserveState: false }
 			);
 		},
 		byUserID() {
