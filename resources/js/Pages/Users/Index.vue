@@ -40,7 +40,7 @@ export default {
 					user_type: this.user_type,
 					page: +this.page + 1,
 				},
-				{ preserveState: true }
+				{ preserveState: false }
 			);
 		},
 		back() {
@@ -56,7 +56,7 @@ export default {
 					user_type: this.user_type,
 					page: +this.page - 1,
 				},
-				{ preserveState: true }
+				{ preserveState: false }
 			);
 		},
 	},

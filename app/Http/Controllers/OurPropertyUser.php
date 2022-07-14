@@ -49,12 +49,13 @@ class OurPropertyUser extends Controller
             }
         }
         if ($request->agency_id) {
-
+            $skip = $request->page - 1;
             $response = Http::withToken(Auth::user()->currentTeam->access_token)->acceptJson()
                 ->get($endpoint, [
 
                     'AgencyID' => $request->agency_id,
-                    'UserType' => $request->user_type
+                    'UserType' => $request->user_type,
+                    'Skip' =>  $skip * 25
                 ]);
             if ($response->successful()) {
                 $search = true;
