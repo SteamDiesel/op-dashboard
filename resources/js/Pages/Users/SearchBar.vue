@@ -39,7 +39,11 @@ export default {
 			if (this.agency_id) {
 				Inertia.get(
 					"/users",
-					{ agency_id: this.agency_id, user_type: this.user_type },
+					{
+						agency_id: this.agency_id,
+						user_type: this.user_type,
+						page: 1,
+					},
 					{ preserveState: true }
 				);
 			}
@@ -235,10 +239,19 @@ export default {
 							<option @click="userType('PM')" value="PM">
 								PM
 							</option>
+							<option @click="userType('OA')" value="OA">
+								OA
+							</option>
+							<option @click="userType('OM')" value="OM">
+								OM
+							</option>
 							<option @click="userType('LL')" value="LL">
 								LL
 							</option>
-							<option @click="userType('T')" value="T">T</option>
+							<option @click="userType('TR')" value="TR">
+								TR
+							</option>
+							<option @click="userType('T')" value="T">TT</option>
 						</select>
 					</div>
 				</div>
