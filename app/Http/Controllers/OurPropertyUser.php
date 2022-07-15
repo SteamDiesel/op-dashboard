@@ -28,7 +28,7 @@ class OurPropertyUser extends Controller
 
             $response = Http::withToken(Auth::user()->currentTeam->access_token)->acceptJson()
                 ->get($endpoint, [
-                    'Email' => $request->email
+                    'UserName' => $request->email
                 ]);
             if ($response->successful()) {
                 $search = true;
